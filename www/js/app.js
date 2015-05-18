@@ -35,22 +35,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       controller: 'LoginCtrl'
   })
   
-  .state('my_courses', {
-      url: '/my-courses',
-      templateUrl: 'templates/my-courses.html',
-      controller: 'MyCoursesCtrl'
-  })
-
   .state('my_sessions', {
-      url: '/my-sessions',
+      url: '/my-sessions/:username',
       templateUrl: 'templates/my-sessions.html',
-      controller: 'MyCoursesCtrl'
+      controller: 'MySessionsCtrl'
   })
 
   .state('session', {
-      url: '/session',
+      url: '/session/:sessionid',
       templateUrl: 'templates/session.html',
-      controller: 'MyCoursesCtrl'
+      controller: 'MySessionCtrl'
   })
 
   // if none of the above states are matched, use this as the fallback

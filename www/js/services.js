@@ -24,39 +24,26 @@ angular.module('starter.services', [])
     }
 })
 
-.factory('GetCoursesService', function($q) {
-    var courses = [{
-      id: 1,
-      name: "Grafos"
-    }, {
-      id: 2,
-      name: "Formais"
-    }, {
-      id: 3,
-      name: "Estatistica"
-    }, {
-      id: 4,
-      name: "POO1"
-    }];
-
+.factory('GetSessionsService', function($q) {
     var sessions = [{
       id: 1,
-      name: "Session1"
+      name: "Session1",
+      courseName: "Grafos"
     }, {
       id: 2,
-      name: "Session2"
+      name: "Session2",
+      courseName: "Teoria da computação"
     }, {
       id: 3,
-      name: "Session3"
+      name: "Session3",
+      courseName: "Organização"
     }, {
       id: 4,
-      name: "Session4"
+      name: "Session4",
+      courseName: "Poo1"
     }];
 
     return {
-        getCourses: function() {
-            return courses;
-        },
         getSessions: function() {
             return sessions;
         }

@@ -5,7 +5,7 @@ angular.module('starter.controllers', [])
 
     $scope.login = function() {
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
-            $state.go('my_courses');
+            $state.go('my_sessions', {'id':$scope.data.username});
         }).error(function(data) {
             var alertPopup = $ionicPopup.alert({
                 title: 'Login failed!',
@@ -15,12 +15,18 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('MyCoursesCtrl', function($scope, GetCoursesService, $state) {
-    $scope.my_courses = GetCoursesService.getCourses();
+.controller('MySessionsCtrl', function($scope, GetSessionsService, $state, $stateParams) {
+    $scope.sessions = GetSessionsService.getSessions();
     
-    $scope.chooseSession = function() {
-      $state.go('my_sessions');
+    /*
+    $scope.chooseSession = function(id) {
+      for (var i = 0; i < $scope.my_courses.length; i++) {
+        if ($scope.my_courses[i].id == id) {
+          $scope.course = $scope.my_courses[i];
+        }
+      }
+      console.log($scope.course);
+      $state.go('my_sessions', $scope.course);
     };
-
-    $scope.my_sessions = GetCoursesService.getSessions();
+    */
 })

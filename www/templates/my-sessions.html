@@ -1,12 +1,15 @@
-<ion-view view-title="Minhas sessões" name="my_sessions-view">
+<ion-view view-title="Minhas sessões" name="sessions-view">
   <ion-content class="padding">
-      <div>            
-          <div class="list card sessions-cards">
-            <a href="#" class="item item-icon-left" ng-repeat="(key, session) in my_sessions">
-              <i class="icon ion-university"></i>
-              {{session.name}}
-            </a>
-          </div>    
+    <div class="card" ng-repeat="(key, session) in sessions">
+      <div class="item item-divider">
+        {{session.courseName}}
       </div>
+      <div class="item item-text-wrap">
+        {{session.name}}
+      </div>
+      <div class="item item-divider">
+        Horário 14:00h
+      </div>
+    </div>
   </ion-content>
 </ion-view>
