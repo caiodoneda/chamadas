@@ -1,10 +1,18 @@
-.image {
+.brasao-image {
 	margin-top: 8em;
 	margin-bottom: 5em;
 	text-align: center;
 }
 
-.image .brasao-img {
+.brasao-image .icon {
 	height: 200px;
 	width: 200px;
+}
+
+.courses-cards {
+	margin-top: 8em;
+}
+
+.sessions-cards {
+	margin-top: 8em;
 }
