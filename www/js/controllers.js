@@ -18,15 +18,12 @@ angular.module('starter.controllers', [])
 .controller('MySessionsCtrl', function($scope, GetSessionsService, $state, $stateParams) {
     $scope.sessions = GetSessionsService.getSessions();
     
-    /*
-    $scope.chooseSession = function(id) {
-      for (var i = 0; i < $scope.my_courses.length; i++) {
-        if ($scope.my_courses[i].id == id) {
-          $scope.course = $scope.my_courses[i];
-        }
-      }
-      console.log($scope.course);
-      $state.go('my_sessions', $scope.course);
+    $scope.loadSession = function(sessionid) {
+        $state.go('session', {'sessionid': sessionid});
     };
-    */
+
+})
+
+.controller('MySessionCtrl', function($scope, GetSessionService, $state, $stateParams) {
+    $scope.session = GetSessionService.getSession($stateParams['sessionid']);
 })

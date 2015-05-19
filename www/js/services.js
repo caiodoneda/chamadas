@@ -43,9 +43,70 @@ angular.module('starter.services', [])
       courseName: "Poo1"
     }];
 
+    var session = [{
+      id: 1,
+      name: "Session1",
+      courseName: "Grafos",
+      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+    }, {
+      id: 2,
+      name: "Session2",
+      courseName: "Teoria da computação",
+      users: [{id:1, name:"Caio"}, {id:4, name:"Diego"}, {id:5, name:"Henrique"}]
+    }, {
+      id: 3,
+      name: "Session3",
+      courseName: "Organização",
+      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+    }, {
+      id: 4,
+      name: "Session4",
+      courseName: "Poo1",
+      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+    }];    
+
     return {
         getSessions: function() {
             return sessions;
+        },
+        getSession: function(sessionid) {
+            for (var i = 0; i < session.length; i++) {
+                  if (session[i].id == sessionid)
+                      return session[i];
+            }
+        }
+    }
+})
+
+.factory('GetSessionService', function($q) {
+    var session = [{
+      id: 1,
+      name: "Session1",
+      courseName: "Grafos",
+      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+    }, {
+      id: 2,
+      name: "Session2",
+      courseName: "Teoria da computação",
+      users: [{id:1, name:"Caio"}, {id:4, name:"Diego"}, {id:5, name:"Henrique"}]
+    }, {
+      id: 3,
+      name: "Session3",
+      courseName: "Organização",
+      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+    }, {
+      id: 4,
+      name: "Session4",
+      courseName: "Poo1",
+      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+    }];    
+
+    return {
+        getSession: function(sessionid) {
+            for (var i = 0; i < session.length; i++) {
+                  if (session[i].id == sessionid)
+                      return session[i];
+            }
         }
     }
 })
