@@ -1,14 +1,15 @@
 <ion-view view-title="Minhas sessões" name="sessions-view">
   <ion-content class="padding">
-    <div class="card" ng-repeat="(key, session) in sessions" ng-click=loadSession(session.id)>
+    <div class="card session-card" ng-repeat="(key, session) in sessions" ng-click=loadSession(session.id)>
       <div class="item item-divider">
+        <i class="icon ion-university"></i>
         {{session.courseName}}
       </div>
       <div class="item item-text-wrap">
-        {{session.name}}
-      </div>
-      <div class="item item-divider">
-        Horário 14:00h
+        <i class="icon ion-calendar"></i>
+        {{session.date}}
+        <i class="icon ion-clock"></i>
+        {{session.time}}
       </div>
     </div>
   </ion-content>

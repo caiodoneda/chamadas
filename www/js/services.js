@@ -28,19 +28,27 @@ angular.module('starter.services', [])
     var sessions = [{
       id: 1,
       name: "Session1",
-      courseName: "Grafos"
+      courseName: "Grafos",
+      time: "10:10 - 12:00",
+      date: "18/05/15 (Mon)"
     }, {
       id: 2,
       name: "Session2",
-      courseName: "Teoria da computação"
+      courseName: "Teoria da computação",
+      time: "10:10 - 12:00",
+      date: "18/05/15 (Mon)"
     }, {
       id: 3,
       name: "Session3",
-      courseName: "Organização"
+      courseName: "Organização",
+      time: "10:10 - 12:00",
+      date: "18/05/15 (Mon)"
     }, {
       id: 4,
       name: "Session4",
-      courseName: "Poo1"
+      courseName: "Poo1",
+      time: "10:10 - 12:00",
+      date: "18/05/15 (Mon)"
     }];
 
     var session = [{

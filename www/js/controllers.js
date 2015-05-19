@@ -1,6 +1,10 @@
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state) {
+.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $ionicViewService) {
+    $ionicViewService.nextViewOptions({
+        disableBack: true
+    });
+
     $scope.data = {};
 
     $scope.login = function() {
@@ -17,7 +21,7 @@ angular.module('starter.controllers', [])
 
 .controller('MySessionsCtrl', function($scope, GetSessionsService, $state, $stateParams) {
     $scope.sessions = GetSessionsService.getSessions();
-    
+      
     $scope.loadSession = function(sessionid) {
         $state.go('session', {'sessionid': sessionid});
     };

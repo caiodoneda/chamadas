@@ -1,5 +1,5 @@
 .brasao-image {
-	margin-top: 7em;
+	margin-top: 5em;
 	margin-bottom: 5em;
 	text-align: center;
 }
@@ -9,6 +9,6 @@
 	width: 200px;
 }
 
-.sessions-cards {
-	margin-top: 8em;
+.session-card .ion-clock {
+	margin-left: 1em;
 }
