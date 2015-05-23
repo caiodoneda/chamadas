@@ -1,11 +1,19 @@
-<ion-view view-title="Sessão {{session.name}}" name="sessions-view">
-  <ion-content class="padding">
-    <div class="list card" ng-repeat="(key, user) in session.users">
-      <div class="item item-avatar">
-        <img src="img/noimage.png">
-        <h2>{{user.name}}</h2>
-        <p>Status: Presente</p>
-      </div>
-    </div>
-  </ion-content>
+<ion-view view-title="{{session.name}}" class="session" name="sessions-view">
+	<ion-content class="padding">
+		<div class="list card" ng-repeat="(key, user) in session.users">
+			<div class="item item-avatar">
+				<img src="img/noimage.png">
+				<h2>{{user.name}}</h2>
+				<p>{{user.status}}</p>
+
+				<div class="presence-opt">
+					<label class="checkbox" ng-repeat="(key, value) in statusOpt">
+						<input class="{{value.opt}}" type="radio" ng-model="user.status" value="{{value.opt}}" 
+						       name="{{user.name}}"> {{value.opt}}
+					</label>
+				</div>
+			</div>
+		</div>
+		<button class="button button-block button-positive post-button" ng-click="Post()">Post</button>
+	</ion-content>
 </ion-view>

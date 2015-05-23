@@ -9,6 +9,31 @@
 	width: 200px;
 }
 
-.session-card .ion-clock {
+.sessions-card .ion-clock {
 	margin-left: 1em;
+}
+
+.checkbox .Presente:checked:before, .Presente input:checked + .Presente-icon:before {
+	border-color: rgb(57, 202, 57);
+	background: rgb(49, 218, 49);
+}
+
+
+.checkbox .Ausente:checked:before, .Ausente input:checked + .Ausente-icon:before {
+	background: #EC2C42;
+  	border-color: #B53838;
+}
+
+.checkbox .Atrasado:checked:before, .Atrasado input:checked + .Atrasado-icon:before {
+	background: #F3F766;
+ 	border-color: #DBD919;
+}
+
+.session .presence-opt {
+	float: right;
+	margin-top: -3em;
+}
+
+.session .post-button {
+	margin-top: 10em; importat!;
 }

@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $ionicViewService) {
-    $ionicViewService.nextViewOptions({
+.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $ionicHistory) {
+    $ionicHistory.nextViewOptions ({
         disableBack: true
     });
 
@@ -30,4 +30,5 @@ angular.module('starter.controllers', [])
 
 .controller('MySessionCtrl', function($scope, GetSessionService, $state, $stateParams) {
     $scope.session = GetSessionService.getSession($stateParams['sessionid']);
+    $scope.statusOpt = [{"opt": "Presente", "color": "green"}, {"opt": "Atrasado", "color": "orange"}, {"opt": "Ausente", "color": "red"}];
 })

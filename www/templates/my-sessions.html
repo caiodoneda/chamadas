@@ -1,6 +1,6 @@
 <ion-view view-title="Minhas sessões" name="sessions-view">
   <ion-content class="padding">
-    <div class="card session-card" ng-repeat="(key, session) in sessions" ng-click=loadSession(session.id)>
+    <div class="card sessions-card" ng-repeat="(key, session) in sessions" ng-click=loadSession(session.id)>
       <div class="item item-divider">
         <i class="icon ion-university"></i>
         {{session.courseName}}

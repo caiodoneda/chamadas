@@ -55,22 +55,22 @@ angular.module('starter.services', [])
       id: 1,
       name: "Session1",
       courseName: "Grafos",
-      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }, {
       id: 2,
       name: "Session2",
       courseName: "Teoria da computação",
-      users: [{id:1, name:"Caio"}, {id:4, name:"Diego"}, {id:5, name:"Henrique"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:4, name:"Diego", status:"Ausente"}, {id:5, name:"Henrique", status:"Ausente"}]
     }, {
       id: 3,
       name: "Session3",
       courseName: "Organização",
-      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }, {
       id: 4,
       name: "Session4",
       courseName: "Poo1",
-      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }];    
 
     return {
@@ -91,24 +91,24 @@ angular.module('starter.services', [])
       id: 1,
       name: "Session1",
       courseName: "Grafos",
-      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }, {
       id: 2,
       name: "Session2",
       courseName: "Teoria da computação",
-      users: [{id:1, name:"Caio"}, {id:4, name:"Diego"}, {id:5, name:"Henrique"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:4, name:"Diego", status:"Ausente"}, {id:5, name:"Henrique", status:"Ausente"}]
     }, {
       id: 3,
       name: "Session3",
       courseName: "Organização",
-      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }, {
       id: 4,
       name: "Session4",
       courseName: "Poo1",
-      users: [{id:1, name:"Caio"}, {id:2, name:"Alfredo"}, {id:3, name:"Carlos"}]
+      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }];    
-
+    
     return {
         getSession: function(sessionid) {
             for (var i = 0; i < session.length; i++) {
