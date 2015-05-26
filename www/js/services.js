@@ -55,7 +55,7 @@ angular.module('starter.services', [])
       id: 1,
       name: "Session1",
       courseName: "Grafos",
-      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
+      users: [{id:1, name:"Caio Bressan Doneda", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }, {
       id: 2,
       name: "Session2",
@@ -91,7 +91,7 @@ angular.module('starter.services', [])
       id: 1,
       name: "Session1",
       courseName: "Grafos",
-      users: [{id:1, name:"Caio", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
+      users: [{id:1, name:"Caio Bressan Doneda", status:"Ausente"}, {id:2, name:"Alfredo", status:"Ausente"}, {id:3, name:"Carlos", status:"Ausente"}]
     }, {
       id: 2,
       name: "Session2",
