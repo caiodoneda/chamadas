@@ -28,7 +28,29 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('MySessionCtrl', function($scope, GetSessionService, $state, $stateParams) {
+.controller('MySessionCtrl', function($scope, GetSessionService, $state, $stateParams, $ionicModal) {
     $scope.session = GetSessionService.getSession($stateParams['sessionid']);
     $scope.statusOpt = [{"opt": "Presente", "color": "green"}, {"opt": "Atrasado", "color": "orange"}, {"opt": "Ausente", "color": "red"}];
+    
+    $ionicModal.fromTemplateUrl('status-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    
+    $scope.openModal = function(user) {
+        $scope.modal.show();
+        $scope.currentUser = user;
+    };
+    
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+
+    $scope.changeStatus = function(status) {
+        $scope.currentUser.status = status;
+        $scope.currentUser = null;
+        $scope.closeModal();
+    };
 })

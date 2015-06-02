@@ -1,35 +1,32 @@
-<ion-view view-title="{{session.name}}" class="session" name="sessions-view">
+<ion-view view-title="{{session.name}}" class="session" name="session-view">
 	<ion-content class="padding">
-		<div class="list card" ng-repeat="(key, user) in session.users">
-			<div class="item item-avatar">
-				<img src="img/noimage.png">
-				<div class="list">
-				  <label class="item item-input item-select">
-				    <div class="input-label">
-						{{user.name}}
-				    </div>
-				    <select ng-model="user.status" value="{{value.opt}}" >
-				      <option ng-repeat="(key, value) in statusOpt">{{value.opt}}</option>
-				    </select>
-				  </label>
-				</div>
-			</div>
-
-			<!--
+		<div class="list card" ng-repeat="(key, user) in session.users" ng-click="openModal(user)">
 			<div class="item item-avatar">
 				<img src="img/noimage.png">
 				<h2>{{user.name}}</h2>
-				<p>{{user.status}}</p>
-
-				<div class="presence-opt">
-					<label class="checkbox" ng-repeat="(key, value) in statusOpt">
-						<input class="{{value.opt}}" type="radio" ng-model="user.status" value="{{value.opt}}" 
-						       name="{{user.name}}"> {{value.opt}}
-					</label>
-				</div>
+    			<p>{{user.status}}</p>
 			</div>
-			-->
+
+			<script id="status-modal.html" type="text/ng-template">
+			  <ion-modal-view>
+			    <ion-header-bar>
+			      <h1 class="title">Defina o status do aluno</h1>
+			    </ion-header-bar>
+			    <ion-content>
+			        <div class="list">
+					  <label class="item item-radio" ng-repeat="(key, value) in statusOpt">
+					    <input type="radio" name="group" value="value.opt" ng-click="changeStatus(value.opt)">
+					    <div class="item-content">{{value.opt}}</div>
+					    <i class="radio-icon ion-checkmark"></i>
+					  </label>
+					</div>
+			    </ion-content>
+			  </ion-modal-view>
+			</script>
+			
 		</div>
+		
+
 		<button class="button button-block button-positive post-button" ng-click="Post()">Post</button>
 	</ion-content>
 </ion-view>
