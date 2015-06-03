@@ -19,19 +19,32 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('MySessionsCtrl', function($scope, GetSessionsService, $state, $stateParams) {
-    $scope.sessions = GetSessionsService.getSessions();
-      
-    $scope.loadSession = function(sessionid) {
-        $state.go('session', {'sessionid': sessionid});
+.controller('MySessionsCtrl', function($scope, SessionsService, $state, $stateParams) {
+    $service = SessionsService.getSessions();
+    $service.then(function(resp) {
+        $scope.courses_with_sessions = (angular.fromJson(resp.data));
+        console.log($scope.courses_with_sessions);
+    }, function(err) {
+        $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
+    });    
+
+    $scope.loadSession = function(session) {
+        $state.go('session', {'attendanceid': session.attendanceid, 'sessionid': session.id, 
+                              'groupid': session.groupid});
     };
 
 })
 
-.controller('MySessionCtrl', function($scope, GetSessionService, $state, $stateParams, $ionicModal) {
-    $scope.session = GetSessionService.getSession($stateParams['sessionid']);
-    $scope.statusOpt = [{"opt": "Presente", "color": "green"}, {"opt": "Atrasado", "color": "orange"}, {"opt": "Ausente", "color": "red"}];
-    
+.controller('MySessionCtrl', function($scope, SessionsService, $state, $stateParams, $ionicModal) {
+    $service = SessionsService.getSession($stateParams['attendanceid'], $stateParams['sessionid'], $stateParams['groupid']);
+    $service.then(function(resp) {
+        $scope.session = (angular.fromJson(resp.data));
+        console.log($scope.session);
+    }, function(err) {
+        $window.alert("Não foi possível obter esta sessão: \n \n =(");
+    }); 
+
+
     $ionicModal.fromTemplateUrl('status-modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
