@@ -28,15 +28,15 @@ angular.module('starter.controllers', [])
         $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
     });    
 
-    $scope.loadSession = function(session) {
-        $state.go('session', {'attendanceid': session.attendanceid, 'sessionid': session.id, 
+    $scope.loadSession = function(moduleid, session) {
+        $state.go('session', {'moduleid': moduleid, 'sessionid': session.id, 
                               'groupid': session.groupid});
     };
 
 })
 
 .controller('MySessionCtrl', function($scope, SessionsService, $state, $stateParams, $ionicModal) {
-    $service = SessionsService.getSession($stateParams['attendanceid'], $stateParams['sessionid'], $stateParams['groupid']);
+    $service = SessionsService.getSession($stateParams['moduleid'], $stateParams['sessionid'], $stateParams['groupid']);
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
         console.log($scope.session);

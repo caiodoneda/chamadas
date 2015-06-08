@@ -5,8 +5,8 @@
         <i class="icon ion-university"></i>
         {{course.fullname}}
       </div>
-      <div ng-repeat="(id, att_instance) in course.attendance_instance">
-        <div class="item item-text-wrap" ng-repeat="(id, instance) in att_instance" ng-click=loadSession(instance)>
+      <div ng-repeat="(moduleid, att_instance) in course.attendance_instance">
+        <div class="item item-text-wrap" ng-repeat="(id, instance) in att_instance" ng-click="loadSession(moduleid, instance)"> 
           <i class="icon ion-calendar"></i>
             {{instance.sessdate * 1000 | date:'dd/MM/yy'}}
           <i class="icon ion-clock"></i>

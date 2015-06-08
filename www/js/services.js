@@ -37,14 +37,14 @@ angular.module('starter.services', [])
                 });
     };
 
-    this.getSession = function (_attendanceid, _sessionid, _groupid) {
+    this.getSession = function (_moduleid, _sessionid, _groupid) {
         return $http({
                       url: "http://107.170.117.157/moodle28/webservice/rest/server.php",
                       method: "GET",
                       params: {wstoken: "fedd80b24f5296cbd138ab89b57a391a",
                                wsfunction: "mod_wsattendance_get_session",
                                moodlewsrestformat: "json",
-                               attendanceid: _attendanceid,
+                               moduleid: _moduleid,
                                sessionid: _sessionid,
                                groupid: _groupid}
 

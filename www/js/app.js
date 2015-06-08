@@ -42,7 +42,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
 
   .state('session', {
-      url: '/session/:sessionid',
+      url: '/session/:moduleid/:sessionid/:groupid',
       templateUrl: 'templates/session.html',
       controller: 'MySessionCtrl'
   })

@@ -1,9 +1,9 @@
-<ion-view view-title="{{session.name}}" class="session" name="session-view">
+<ion-view view-title="{{session.sessioninfo.description}}" class="session" name="session-view">
 	<ion-content class="padding">
 		<div class="list card" ng-repeat="(key, user) in session.users" ng-click="openModal(user)">
 			<div class="item item-avatar">
 				<img src="img/noimage.png">
-				<h2>{{user.name}}</h2>
+				<h2>{{user.firstname + " " + user.lastname}}</h2>
     			<p>{{user.status}}</p>
 			</div>
 
@@ -14,9 +14,9 @@
 			    </ion-header-bar>
 			    <ion-content>
 			        <div class="list">
-					  <label class="item item-radio" ng-repeat="(key, value) in statusOpt">
-					    <input type="radio" name="group" value="value.opt" ng-click="changeStatus(value.opt)">
-					    <div class="item-content">{{value.opt}}</div>
+					  <label class="item item-radio" ng-repeat="(key, status) in session.statuses">
+					    <input type="radio" name="group" value="status.description" ng-click="changeStatus(status.description)">
+					    <div class="item-content">{{status.description}}</div>
 					    <i class="radio-icon ion-checkmark"></i>
 					  </label>
 					</div>
