@@ -1,32 +1,46 @@
 <ion-view view-title="{{session.sessioninfo.description}}" class="session" name="session-view">
+	<ion-nav-buttons side="right">
+		<button class="button icon ion-gear-a" ng-click="openPopover($event)"></button>
+	</ion-nav-buttons>
+
 	<ion-content class="padding">
 		<div class="list card" ng-repeat="(key, user) in session.users" ng-click="openModal(user)">
 			<div class="item item-avatar">
 				<img src="img/noimage.png">
 				<h2>{{user.firstname + " " + user.lastname}}</h2>
     			<p>{{user.status}}</p>
-			</div>
-
-			<script id="status-modal.html" type="text/ng-template">
-			  <ion-modal-view>
-			    <ion-header-bar>
-			      <h1 class="title">Defina o status do aluno</h1>
-			    </ion-header-bar>
-			    <ion-content>
-			        <div class="list">
-					  <label class="item item-radio" ng-repeat="(key, status) in session.statuses">
-					    <input type="radio" name="group" value="status.description" 
-					           ng-click="changeStatus(status)">
-					    <div class="item-content">{{status.description}}</div>
-					    <i class="radio-icon ion-checkmark"></i>
-					  </label>
-					</div>
-			    </ion-content>
-			  </ion-modal-view>
-			</script>
-			
+			</div>	
 		</div>
 		
+		<script id="status-modal.html" type="text/ng-template">
+		  <ion-modal-view>
+		    <ion-header-bar>
+		      <h1 class="title">Defina o status do aluno</h1>
+		    </ion-header-bar>
+		    <ion-content>
+		        <div class="list">
+				  <label class="item item-radio" ng-repeat="(key, status) in session.statuses">
+				    <input type="radio" name="group" value="status.description" 
+				           ng-click="changeStatus(status)">
+				    <div class="item-content">{{status.description}}</div>
+				    <i class="radio-icon ion-checkmark"></i>
+				  </label>
+				</div>
+		    </ion-content>
+		  </ion-modal-view>
+		</script>
+
+        <script id="settings.html" type="text/ng-template">
+            <ion-popover-view class="fit">
+                <ion-content>
+                    <button class="button button-full" ng-repeat="(key, status) in session.statuses" ng-click="updateAll(status)">
+                        Marcar todos como {{status.description}}
+                    </button>
+
+                    <button class="button button-full logout-button" ng-click="logout()"> Sair </button>
+                </ion-content>
+            </ion-popover-view>
+        </script>
 
 		<button class="button button-block button-positive post-button" ng-click="takeAttendance(session)">
 		    Enviar sessão
