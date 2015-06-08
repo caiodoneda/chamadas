@@ -35,11 +35,10 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('MySessionCtrl', function($scope, SessionsService, $state, $stateParams, $ionicModal) {
+.controller('MySessionCtrl', function($scope, SessionsService, $state, $stateParams, $ionicModal, $window) {
     $service = SessionsService.getSession($stateParams['moduleid'], $stateParams['sessionid'], $stateParams['groupid']);
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
-        console.log($scope.session);
     }, function(err) {
         $window.alert("Não foi possível obter esta sessão: \n \n =(");
     }); 
@@ -62,8 +61,37 @@ angular.module('starter.controllers', [])
     };
 
     $scope.changeStatus = function(status) {
-        $scope.currentUser.status = status;
+        $scope.currentUser.status = status.description;
+        $scope.currentUser.statusid = status.id;
         $scope.currentUser = null;
         $scope.closeModal();
     };
+
+    $scope.takeAttendance = function (session) {
+        var users = []; 
+        var proceed = true;
+
+        angular.forEach(session.users, function(user) {
+            var current_user = {};
+            current_user.userid = user.id;
+            
+            if (typeof user.statusid != 'undefined') {
+                current_user.statusid = user.statusid;
+            } else {
+                proceed = false;
+            }
+
+            current_user.remarks = "";
+            users.push(current_user);
+        });
+
+        if (proceed) {
+            //make post
+        } else {
+            $window.alert("Ainda existem usuários com estado indefinido!!!");
+        }
+
+        console.log(users);
+        //$service = SessionsService.takeAttendance(session);
+    }
 })

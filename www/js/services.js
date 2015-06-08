@@ -29,7 +29,7 @@ angular.module('starter.services', [])
         return $http({
                       url: "http://107.170.117.157/moodle28/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "fedd80b24f5296cbd138ab89b57a391a",
+                      params: {wstoken: "90214ddb49b42908386ad3fea2bcc0ae",
                                wsfunction: "mod_wsattendance_get_courses_with_sessions",
                                moodlewsrestformat: "json",
                                userid: "103"}
@@ -41,7 +41,7 @@ angular.module('starter.services', [])
         return $http({
                       url: "http://107.170.117.157/moodle28/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "fedd80b24f5296cbd138ab89b57a391a",
+                      params: {wstoken: "90214ddb49b42908386ad3fea2bcc0ae",
                                wsfunction: "mod_wsattendance_get_session",
                                moodlewsrestformat: "json",
                                moduleid: _moduleid,
@@ -51,7 +51,17 @@ angular.module('starter.services', [])
                 });
     };
 
-    this.takeAttendance = function (cust) {
-        return $http.post(urlBase, cust);
+    this.takeAttendance = function (_users, _sessionid, _takenby, _groupid) {
+        return $http({
+                      url: "http://107.170.117.157/moodle28/webservice/rest/server.php",
+                      method: "GET",
+                      params: {wstoken: "90214ddb49b42908386ad3fea2bcc0ae",
+                               wsfunction: "mod_wsattendance_take_attendance",
+                               users: _users,
+                               sessionid: _sessionid,
+                               takenby: _takenby,
+                               grouptype: _groupid}
+
+                });
     };
 }])
