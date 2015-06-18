@@ -27,9 +27,9 @@ angular.module('starter.services', [])
 .service('SessionsService', ['$http', function ($http, $scope) {
     this.getSessions = function() {
         return $http({
-                      url: "http://107.170.117.157/moodle28/webservice/rest/server.php",
+                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "aaa682bcba3b49d53f3a8bf83a012aa4",
+                      params: {wstoken: "bcb1e1bb0fb560963da6220d814120ec",
                                wsfunction: "mod_wsattendance_get_courses_with_sessions",
                                moodlewsrestformat: "json",
                                userid: "103"}
@@ -39,9 +39,9 @@ angular.module('starter.services', [])
 
     this.getSession = function (_moduleid, _sessionid, _groupid) {
         return $http({
-                      url: "http://107.170.117.157/moodle28/webservice/rest/server.php",
+                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "aaa682bcba3b49d53f3a8bf83a012aa4",
+                      params: {wstoken: "bcb1e1bb0fb560963da6220d814120ec",
                                wsfunction: "mod_wsattendance_get_session",
                                moodlewsrestformat: "json",
                                moduleid: _moduleid,
@@ -53,9 +53,9 @@ angular.module('starter.services', [])
 
     this.takeAttendance = function (_users, _sessionid, _takenby, _groupid) {
        return $http({
-                      url: "http://107.170.117.157/moodle28/webservice/rest/server.php",
+                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "POST",
-                      params: {wstoken: "aaa682bcba3b49d53f3a8bf83a012aa4",
+                      params: {wstoken: "bcb1e1bb0fb560963da6220d814120ec",
                                wsfunction: "mod_wsattendance_take_attendance",
                                users: _users,
                                sessionid: _sessionid,
