@@ -101,7 +101,6 @@ angular.module('starter.controllers', [])
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
         $ionicLoading.hide();
-        console.log($scope.session);
     }, function(err) {
         $window.alert("Não foi possível obter esta sessão: \n \n =(");
     }); 
@@ -141,20 +140,18 @@ angular.module('starter.controllers', [])
         var proceed = true;
 
         angular.forEach(session.users, function(user) {
-            var current_user = {};
-            current_user.userid = user.id;
+            var current_user = [];
+            current_user["userid"] = user.id;
 
             if (typeof user.statusid != 'undefined') {
-                current_user.statusid = user.statusid;
+                current_user["statusid"] = user.statusid;
             } else {
                 proceed = false;
             }
 
-            current_user.remarks = "";
+            current_user["remarks"] = "";
             users.push(current_user);
         });
-
-        console.log(users);
 
         if (proceed) {
 

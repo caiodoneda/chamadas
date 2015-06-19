@@ -52,7 +52,7 @@ angular.module('starter.services', [])
     };
 
     this.takeAttendance = function (_users, _sessionid, _takenby, _groupid) {
-       return $http({
+        return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "POST",
                       params: {wstoken: "bcb1e1bb0fb560963da6220d814120ec",
