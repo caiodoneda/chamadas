@@ -166,6 +166,7 @@ angular.module('starter.controllers', [])
             $service = SessionsService.takeAttendance(users, session.sessioninfo.id, 103, "");
 
             $service.then(function(resp) {
+                console.log(resp);
                 $ionicLoading.hide();
                 $window.alert("Sucesso!!");
                 $state.go('my_sessions', {'id':103});

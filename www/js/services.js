@@ -52,15 +52,15 @@ angular.module('starter.services', [])
     };
 
     this.takeAttendance = function (_users, _sessionid, _takenby, _groupid) {
+                      console.log(_users);
         return $http({
-                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
+                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php?wstoken=bcb1e1bb0fb560963da6220d814120ec&wsfunction=mod_wsattendance_take_attendance&moodlewsrestformat=json",
                       method: "POST",
-                      params: {wstoken: "bcb1e1bb0fb560963da6220d814120ec",
-                               wsfunction: "mod_wsattendance_take_attendance",
-                               users: _users,
+                      data: {  users: _users,
                                sessionid: _sessionid,
                                takenby: _takenby,
-                               grouptype: _groupid}
+                               grouptype: _groupid},
+                      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
     };
 }])
