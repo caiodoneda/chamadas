@@ -25,14 +25,14 @@ angular.module('starter.services', [])
 })
 
 .service('SessionsService', ['$http', function ($http, $scope) {
-    this.getSessions = function() {
+    this.getSessions = function(_userid) {
         return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "bcb1e1bb0fb560963da6220d814120ec",
-                               wsfunction: "mod_wsattendance_get_courses_with_sessions",
+                      params: {wstoken: "13453d8ad6a8ead45113c33c56bee530",
+                               wsfunction: "mod_wsattendance_get_courses_with_today_sessions",
                                moodlewsrestformat: "json",
-                               userid: "103"}
+                               userid: _userid}
 
                 });
     };
@@ -41,7 +41,7 @@ angular.module('starter.services', [])
         return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "bcb1e1bb0fb560963da6220d814120ec",
+                      params: {wstoken: "13453d8ad6a8ead45113c33c56bee530",
                                wsfunction: "mod_wsattendance_get_session",
                                moodlewsrestformat: "json",
                                moduleid: _moduleid,
