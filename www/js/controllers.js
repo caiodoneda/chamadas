@@ -46,9 +46,10 @@ angular.module('starter.controllers', [])
         $scope.popover.hide();
     };
     
-    $service = SessionsService.getSessions();
+    $service = SessionsService.getSessions(103);
     $service.then(function(resp) {
         $scope.courses_with_sessions = (angular.fromJson(resp.data));
+        console.log(resp);
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
