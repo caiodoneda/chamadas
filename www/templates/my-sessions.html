@@ -4,17 +4,18 @@
    </ion-nav-buttons>
 
    <ion-content class="padding">
-    <div class="card sessions-card" ng-repeat="(courseid, course) in courses_with_sessions">
+    <div class="card sessions-card" ng-repeat="(key, course) in courses_with_sessions">
       <div class="item item-divider">
         <i class="icon ion-university"></i>
         {{course.fullname}}
       </div>
-      <div ng-repeat="(moduleid, att_instance) in course.attendance_instance">
-        <div class="item item-text-wrap" ng-repeat="(id, instance) in att_instance" ng-click="loadSession(moduleid, instance)"> 
+      <div ng-repeat="(key, att_instance) in course.attendance_instances">
+        <div class="item item-text-wrap" ng-repeat="(key, today_session) in att_instance.today_sessions" ng-click="loadSession(today_session)">
+          {{att_instance.name}}:
           <i class="icon ion-calendar"></i>
-            {{instance.sessdate * 1000 | date:'dd/MM/yy'}}
+            {{today_session.sessdate * 1000 | date:'dd/MM/yy'}}
           <i class="icon ion-clock"></i>
-            {{instance.sessdate * 1000 | date :'HH:mm'}}
+            {{today_session.sessdate * 1000 | date :'HH:mm'}}
         </div>
       </div>
     </div>

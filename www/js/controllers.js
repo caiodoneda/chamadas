@@ -64,9 +64,8 @@ angular.module('starter.controllers', [])
         $state.go('login');
     };
 
-    $scope.loadSession = function(moduleid, session) {
-        $state.go('session', {'moduleid': moduleid, 'sessionid': session.id, 
-                              'groupid': session.groupid});
+    $scope.loadSession = function(session) {
+        $state.go('session', {'sessionid': session.id});
     };
 
 })
@@ -98,9 +97,10 @@ angular.module('starter.controllers', [])
         $scope.popover.hide();
     };
 
-    $service = SessionsService.getSession($stateParams['moduleid'], $stateParams['sessionid'], $stateParams['groupid']);
+    $service = SessionsService.getSession($stateParams['sessionid']);
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
+        console.log(resp.data);
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter esta sessão: \n \n =(");
@@ -137,7 +137,8 @@ angular.module('starter.controllers', [])
     };
 
     $scope.takeAttendance = function (session) {
-        var users = []; 
+        var users = {};
+        var session_info = {};
         var proceed = true;
 
         angular.forEach(session.users, function(user) {
@@ -145,15 +146,25 @@ angular.module('starter.controllers', [])
                 proceed = false;
             }
             
-            var current_user = [];
-            current_user['userid'] = user.id;
-            current_user['statusid'] = user.statusid;
-            current_user['remarks'] = "";
-            users.push(current_user);
+            var current_user = {"id": user.id, "statusid": user.statusid, "remarks": ""};
+            users[user.id] = current_user;
         });
 
-        if (proceed) {
+        statusset = "";
+        angular.forEach(session.statuses, function(status) {
+            if (statusset) {
+                statusset = statusset + "," + status.id;
+            } else {
+                statusset = status.id;
+            }
+        });
 
+        var d = new Date();
+        var time = d.getTime();
+        session_info = {"statusset": statusset, "id": session.id, "timetaken": time, "takenby": 103};
+        console.log(angular.toJson(session_info), angular.toJson(users));
+
+        if (proceed) {
             $ionicLoading.show({
                 content: 'Loading',
                 animation: 'fade-in',
@@ -162,10 +173,10 @@ angular.module('starter.controllers', [])
                 showDelay: 0
             });
 
-            $service = SessionsService.takeAttendance(users, session.sessioninfo.id, 103, "");
+            $service = SessionsService.takeAttendance(angular.toJson(users), angular.toJson(session_info));
             console.log($service);
             $service.then(function(resp) {
-                console.log(resp);
+                console.log(resp.data);
                 $ionicLoading.hide();
                 $window.alert("Sucesso!!");
                 //$state.go('my_sessions', {'id':103});
@@ -173,7 +184,6 @@ angular.module('starter.controllers', [])
                 $window.alert("Não foi possível enviar esta sessão: \n \n =(");
                 $ionicLoading.hide();    
             });
-
         } else {
             $window.alert("Ainda existem usuários com estado indefinido!!!");
         }

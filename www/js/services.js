@@ -37,30 +37,37 @@ angular.module('starter.services', [])
                 });
     };
 
-    this.getSession = function (_moduleid, _sessionid, _groupid) {
+    this.getSession = function (_sessionid) {
         return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "GET",
                       params: {wstoken: "13453d8ad6a8ead45113c33c56bee530",
-                               wsfunction: "mod_wsattendance_get_session",
+                               wsfunction: "mod_wsattendance_get_session_info",
                                moodlewsrestformat: "json",
-                               moduleid: _moduleid,
-                               sessionid: _sessionid,
-                               groupid: _groupid}
+                               sessionid: _sessionid}
 
                 });
     };
 
-    this.takeAttendance = function (_users, _sessionid, _takenby, _groupid) {
-        console.log(_users);
+    this.takeAttendance = function (_users, _session_info) {
+        console.log(_users, _session_info);
+        /*data = {};
+        data.wstoken = "13453d8ad6a8ead45113c33c56bee530";
+        data.wsfunction = "mod_wsattendance_take_attendance";
+        data.students = _users;
+        data.session = _session_info;
+
+        url = "http://107.170.117.157/moodle29/webservice/rest/server.php";
+        return $http.post(url, data);*/
+
         return $http({
-                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php?wstoken=bcb1e1bb0fb560963da6220d814120ec&wsfunction=mod_wsattendance_take_attendance&moodlewsrestformat=json",
+                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "POST",
-                      data: {  users: _users,
-                               sessionid: _sessionid,
-                               takenby: _takenby,
-                               grouptype: _groupid},
-                      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });
+                      headers: "Content-Type: application/xml; charset=utf-8",
+                      params: {wstoken: "13453d8ad6a8ead45113c33c56bee530",
+                               wsfunction: "mod_wsattendance_take_attendance"},
+                      data: {session: _session_info,
+                             students: _users}
+                      });
     };
 }])
