@@ -140,16 +140,14 @@ angular.module('starter.controllers', [])
         var proceed = true;
 
         angular.forEach(session.users, function(user) {
-            var current_user = [];
-            current_user["userid"] = user.id;
-
-            if (typeof user.statusid != 'undefined') {
-                current_user["statusid"] = user.statusid;
-            } else {
+            if (typeof user.statusid == 'undefined') {
                 proceed = false;
             }
-
-            current_user["remarks"] = "";
+            
+            var current_user = [];
+            current_user['userid'] = user.id;
+            current_user['statusid'] = user.statusid;
+            current_user['remarks'] = "";
             users.push(current_user);
         });
 
@@ -164,14 +162,15 @@ angular.module('starter.controllers', [])
             });
 
             $service = SessionsService.takeAttendance(users, session.sessioninfo.id, 103, "");
-
+            console.log($service);
             $service.then(function(resp) {
                 console.log(resp);
                 $ionicLoading.hide();
                 $window.alert("Sucesso!!");
-                $state.go('my_sessions', {'id':103});
+                //$state.go('my_sessions', {'id':103});
             }, function(err) {
                 $window.alert("Não foi possível enviar esta sessão: \n \n =(");
+                $ionicLoading.hide();    
             });
 
         } else {
