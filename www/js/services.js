@@ -50,24 +50,25 @@ angular.module('starter.services', [])
     };
 
     this.takeAttendance = function (_users, _session_info) {
-        console.log(_users, _session_info);
-        /*data = {};
-        data.wstoken = "13453d8ad6a8ead45113c33c56bee530";
-        data.wsfunction = "mod_wsattendance_take_attendance";
-        data.students = _users;
-        data.session = _session_info;
-
-        url = "http://107.170.117.157/moodle29/webservice/rest/server.php";
-        return $http.post(url, data);*/
+        console.log("users");
+        console.log(_users);
+        console.log("session");
+        console.log(_session_info);
 
         return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "POST",
-                      headers: "Content-Type: application/xml; charset=utf-8",
-                      params: {wstoken: "13453d8ad6a8ead45113c33c56bee530",
-                               wsfunction: "mod_wsattendance_take_attendance"},
-                      data: {session: _session_info,
-                             students: _users}
+                      headers: {
+                          'Content-Type': 'application/form-data'
+                      },
+                      params: {
+                          wstoken: "13453d8ad6a8ead45113c33c56bee530",
+                          wsfunction: "mod_wsattendance_take_attendance"
+                      },
+                      data: {
+                          session: _session_info,
+                          students: _users
+                      }
                       });
     };
 }])

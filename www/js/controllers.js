@@ -162,7 +162,6 @@ angular.module('starter.controllers', [])
         var d = new Date();
         var time = d.getTime();
         session_info = {"statusset": statusset, "id": session.id, "timetaken": time, "takenby": 103};
-        console.log(angular.toJson(session_info), angular.toJson(users));
 
         if (proceed) {
             $ionicLoading.show({
@@ -174,7 +173,6 @@ angular.module('starter.controllers', [])
             });
 
             $service = SessionsService.takeAttendance(angular.toJson(users), angular.toJson(session_info));
-            console.log($service);
             $service.then(function(resp) {
                 console.log(resp.data);
                 $ionicLoading.hide();
