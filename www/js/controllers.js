@@ -174,7 +174,6 @@ angular.module('starter.controllers', [])
 
             $service = SessionsService.takeAttendance(angular.toJson(users), angular.toJson(session_info));
             $service.then(function(resp) {
-                console.log(resp.data);
                 $ionicLoading.hide();
                 $window.alert("Sucesso!!");
                 //$state.go('my_sessions', {'id':103});

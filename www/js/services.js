@@ -50,25 +50,20 @@ angular.module('starter.services', [])
     };
 
     this.takeAttendance = function (_users, _session_info) {
-        console.log("users");
-        console.log(_users);
-        console.log("session");
-        console.log(_session_info);
+        //Moodle  does not support JSON parameters as input.
+        data_as_string = 'session=' + _session_info +'&students='+ _users;
 
         return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "POST",
                       headers: {
-                          'Content-Type': 'application/form-data'
+                          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                       },
                       params: {
                           wstoken: "13453d8ad6a8ead45113c33c56bee530",
                           wsfunction: "mod_wsattendance_take_attendance"
                       },
-                      data: {
-                          session: _session_info,
-                          students: _users
-                      }
+                      data: data_as_string
                       });
     };
 }])
