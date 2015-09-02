@@ -6,9 +6,12 @@ angular.module('starter.controllers', [])
     });
 
     $scope.data = {};
+    $scope.data.url = window.localStorage['url'] || '';
 
     $scope.login = function() {
-        LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
+        LoginService.loginUser($scope.data.username, $scope.data.password, $scope.data.url).success(function(data) {
+            window.localStorage['url'] = $scope.data.url;
+            window.localStorage['username'] = $scope.data.username;
             $state.go('my_sessions', {'id':$scope.data.username});
         }).error(function(data) {
             var alertPopup = $ionicPopup.alert({
@@ -49,7 +52,6 @@ angular.module('starter.controllers', [])
     $service = SessionsService.getSessions(103);
     $service.then(function(resp) {
         $scope.courses_with_sessions = (angular.fromJson(resp.data));
-        console.log(resp);
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
@@ -97,10 +99,28 @@ angular.module('starter.controllers', [])
         $scope.popover.hide();
     };
 
+    function onNfc(nfcEvent) {
+
+        var tag = nfcEvent.tag;
+        var tagId = nfc.bytesToHexString(tag.id);
+        alert(tagId);
+
+    }
+
+    function win() {
+        console.log("Listening for NFC Tags");
+    }
+
+    function fail(error) {
+        alert("Error adding NFC listener");
+    }
+
+    if (typeof nfc !== 'undefined') nfc.addTagDiscoveredListener(onNfc, win, fail);
+
+
     $service = SessionsService.getSession($stateParams['sessionid']);
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
-        console.log(resp.data);
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter esta sessão: \n \n =(");
