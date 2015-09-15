@@ -100,11 +100,9 @@ angular.module('starter.controllers', [])
     };
 
     function onNfc(nfcEvent) {
-
         var tag = nfcEvent.tag;
         var tagId = nfc.bytesToHexString(tag.id);
         alert(tagId);
-
     }
 
     function win() {
@@ -117,15 +115,39 @@ angular.module('starter.controllers', [])
 
     if (typeof nfc !== 'undefined') nfc.addTagDiscoveredListener(onNfc, win, fail);
 
-
     $service = SessionsService.getSession($stateParams['sessionid']);
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
+        updateStatus($scope.session);
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter esta sessão: \n \n =(");
     }); 
 
+    function updateStatus(session) {
+        attendance_log = [];
+        angular.forEach(session.attendance_log, function(log){
+            attendance_log[log.studentid] = log.statusid;
+        });
+
+        if (session.attendance_log) {
+            angular.forEach(session.users, function(user) {
+                user.statusid = attendance_log[user.id];
+                user.status = findStatus(session.statuses, parseInt(user.statusid));
+            });
+        }
+    }
+
+    function findStatus(statuses, statusid) {
+        description = ""
+        angular.forEach(statuses, function(status) {
+            if (status.id == statusid) {
+                description = status.description;
+            }
+        });
+
+        return description;
+    }
 
     $ionicModal.fromTemplateUrl('status-modal.html', {
         scope: $scope,
@@ -196,7 +218,7 @@ angular.module('starter.controllers', [])
             $service.then(function(resp) {
                 $ionicLoading.hide();
                 $window.alert("Sucesso!!");
-                //$state.go('my_sessions', {'id':103});
+                $state.go('my_sessions', {'id':103});
             }, function(err) {
                 $window.alert("Não foi possível enviar esta sessão: \n \n =(");
                 $ionicLoading.hide();    
