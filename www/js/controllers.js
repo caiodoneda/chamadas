@@ -73,6 +73,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('MySessionCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopover, $ionicHistory) {
+
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -121,6 +122,7 @@ angular.module('starter.controllers', [])
     $service = SessionsService.getSession($stateParams['sessionid']);
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
+        console.log($scope.session);
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter esta sessão: \n \n =(");

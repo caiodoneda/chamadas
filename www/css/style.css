@@ -42,3 +42,8 @@ ion-popover-view.fit .button.button-full {
 .logout-button {
 	background: rgb(151, 187, 244);
 }
+
+.student_card {
+	margin-bottom: 5px;
+	margin-top: 5px;	
+}
