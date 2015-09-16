@@ -73,6 +73,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('MySessionCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopover, $ionicHistory) {
+
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
