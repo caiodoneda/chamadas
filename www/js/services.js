@@ -1,6 +1,25 @@
 angular.module('starter.services', [])
 
 .service('LoginService', function($q) {
+    require(['moodle-client'], function (moodleClient) {
+        console.log(moodleClient);
+    });
+    /*
+    const client = require("moodle-client");
+    console.log(client);
+    var c = client.create({
+        wwwroot: "http://localhost/moodle/"
+    });
+
+    c.authenticate({
+        username: "mysystemusername",
+        password: "my$y$tem pa33w0rd"
+    }, function (error) {
+        if (!error) {
+            // Client is authenticated and ready to be used.
+        }
+    });
+    */
     return {
         loginUser: function(name, pw) {
             var deferred = $q.defer();
