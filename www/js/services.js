@@ -29,7 +29,7 @@ angular.module('starter.services', [])
         return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "13453d8ad6a8ead45113c33c56bee530",
+                      params: {wstoken: "dc6d0690f70a922ea6350e4e6a31d201",
                                wsfunction: "mod_wsattendance_get_courses_with_today_sessions",
                                moodlewsrestformat: "json",
                                userid: _userid}
@@ -41,7 +41,7 @@ angular.module('starter.services', [])
         return $http({
                       url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
                       method: "GET",
-                      params: {wstoken: "13453d8ad6a8ead45113c33c56bee530",
+                      params: {wstoken: "dc6d0690f70a922ea6350e4e6a31d201",
                                wsfunction: "mod_wsattendance_get_session_info",
                                moodlewsrestformat: "json",
                                sessionid: _sessionid}
@@ -60,7 +60,7 @@ angular.module('starter.services', [])
                           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                       },
                       params: {
-                          wstoken: "13453d8ad6a8ead45113c33c56bee530",
+                          wstoken: "dc6d0690f70a922ea6350e4e6a31d201",
                           wsfunction: "mod_wsattendance_take_attendance"
                       },
                       data: data_as_string
