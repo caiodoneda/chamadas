@@ -7,6 +7,8 @@ angular.module('starter.controllers', [])
 
     $scope.data = {};
     $scope.data.url = window.localStorage['url'] || '';
+    $scope.data.username = window.localStorage['username'] || '';
+    $scope.data.password = '';
 
     $scope.login = function() {
         LoginService.loginUser($scope.data.username, $scope.data.password, $scope.data.url).success(function(data) {
@@ -15,8 +17,8 @@ angular.module('starter.controllers', [])
             $state.go('my_sessions', {'id':$scope.data.username});
         }).error(function(data) {
             var alertPopup = $ionicPopup.alert({
-                title: 'Login failed!',
-                template: 'Please check your credentials!'
+                title: 'Falha ao autenticar! =/',
+                template: 'Por favor, verifique suas credenciais!'
             });
         });
     }
