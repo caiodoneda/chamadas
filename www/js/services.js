@@ -1,47 +1,19 @@
 angular.module('starter.services', [])
 
-.service('LoginService', function($q) {
-    require(['moodle-client'], function (moodleClient) {
-        console.log(moodleClient);
-    });
-    /*
-    const client = require("moodle-client");
-    console.log(client);
-    var c = client.create({
-        wwwroot: "http://localhost/moodle/"
-    });
+.service('LoginService', ['$http', function ($http, $scope) {
+    this.getUserToken = function(pw) {
+        var url = window.localStorage['url'] + '/login/token.php';
+        var username = window.localStorage['username'];
+        return $http({
+                      url: url,
+                      method: "GET",
+                      params: {username: username,
+                               password: pw,
+                               service: "moodle_mobile_app"}
 
-    c.authenticate({
-        username: "mysystemusername",
-        password: "my$y$tem pa33w0rd"
-    }, function (error) {
-        if (!error) {
-            // Client is authenticated and ready to be used.
-        }
-    });
-    */
-    return {
-        loginUser: function(name, pw) {
-            var deferred = $q.defer();
-            var promise = deferred.promise;
-
-            if (name == 'user' && pw == 'secret') {
-                deferred.resolve('Welcome ' + name + '!');
-            } else {
-                deferred.reject('Wrong credentials.');
-            }
-            promise.success = function(fn) {
-                promise.then(fn);
-                return promise;
-            }
-            promise.error = function(fn) {
-                promise.then(null, fn);
-                return promise;
-            }
-            return promise;
-        }
-    }
-})
+                });
+    };
+}])
 
 .service('SessionsService', ['$http', function ($http, $scope) {
     this.getSessions = function(_userid) {

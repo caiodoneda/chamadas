@@ -11,10 +11,12 @@ angular.module('starter.controllers', [])
     $scope.data.password = '';
 
     $scope.login = function() {
-        LoginService.loginUser($scope.data.username, $scope.data.password, $scope.data.url).success(function(data) {
-            window.localStorage['url'] = $scope.data.url;
-            window.localStorage['username'] = $scope.data.username;
-            $state.go('my_sessions', {'id':$scope.data.username});
+        console.log($scope.data.url);
+        window.localStorage['url'] = $scope.data.url;
+        window.localStorage['username'] = $scope.data.username;
+        LoginService.getUserToken($scope.data.password).success(function(data) {
+            console.log(data);
+            //$state.go('my_sessions', {'id':$scope.data.username});
         }).error(function(data) {
             var alertPopup = $ionicPopup.alert({
                 title: 'Falha ao autenticar! =/',
