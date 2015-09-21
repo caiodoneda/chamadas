@@ -14,15 +14,18 @@ angular.module('starter.controllers', [])
         console.log($scope.data.url);
         window.localStorage['url'] = $scope.data.url;
         window.localStorage['username'] = $scope.data.username;
-        LoginService.getUserToken($scope.data.password).success(function(data) {
-            console.log(data);
+        LoginService.getUserToken($scope.data.password); /*.success(function(data) {
+            console.log(data.hasOwnProperty('error'));
+            if (data.hasOwnProperty('error')) {
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Falha ao autenticar! =/',
+                    template: 'Por favor, verifique suas credenciais!'
+                });
+            } else {
+                
+            } */
             //$state.go('my_sessions', {'id':$scope.data.username});
-        }).error(function(data) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Falha ao autenticar! =/',
-                template: 'Por favor, verifique suas credenciais!'
-            });
-        });
+       // });
     }
 })
 

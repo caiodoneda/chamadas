@@ -1,8 +1,22 @@
 angular.module('starter.services', [])
 
-.service('LoginService', ['$http', function ($http, $scope) {
+.service('LoginService', ['$http', function ($http, $scope, $window) {
+    this.checkUrl = function() {
+        //TODO
+    };
+
     this.getUserToken = function(pw) {
-        var url = window.localStorage['url'] + '/login/token.php';
+        //var ref = window.open('https://moodle.ufsc.br/login/index.php?' , '_system', 'location=no');
+        
+
+        var ref = window.open('http://www.google.com' , '_system', 'location=no');
+        var myCallback = function() { alert(event.url); }
+        ref.addEventListener('exit', myCallback);
+        
+        
+
+        //var url = window.localStorage['url'] + '/login/token.php';
+        /*
         var username = window.localStorage['username'];
         return $http({
                       url: url,
@@ -12,6 +26,7 @@ angular.module('starter.services', [])
                                service: "moodle_mobile_app"}
 
                 });
+        */
     };
 }])
 
