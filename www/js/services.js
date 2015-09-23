@@ -1,71 +1,84 @@
 angular.module('starter.services', [])
 
-.service('LoginService', ['$http', function ($http, $scope, $window) {
+.service('LoginService', ['$http', function ($http, $scope) {
     this.checkUrl = function() {
-        //TODO
+        var url = window.localStorage['url'] + '/login/token.php';
+        return $http({
+                      url: url,
+                      method: "GET",
+                      params: {username: "username",
+                               password: "pw",
+                               service: "local_mobile"}
+
+        });
     };
 
-    this.getUserToken = function(pw) {
-        var ref = cordova.InAppBrowser.open('http://apache.org', '_blank', 'location=yes');
-        ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
-         ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
-         ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-         ref.addEventListener('exit', function(event) { alert(event.type); });
-        //var ref = window.open('https://moodle.ufsc.br/login/index.php?' , '_system', 'location=no');   
-        console.log(ref);
-
-        //var url = window.localStorage['url'] + '/login/token.php';
-        /*
+    this.getUserToken = function(pw) { 
+        var url = window.localStorage['url'] + '/login/token.php';
         var username = window.localStorage['username'];
         return $http({
                       url: url,
                       method: "GET",
                       params: {username: username,
                                password: pw,
-                               service: "moodle_mobile_app"}
+                               service: "local_mobile"}
 
-                });
-        */
+        });
     };
 }])
 
 .service('SessionsService', ['$http', function ($http, $scope) {
-    this.getSessions = function(_userid) {
+    this.getSiteInfo = function() {
+        var url = window.localStorage['url'] + '/webservice/rest/server.php';
         return $http({
-                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
+                      url: url,
                       method: "GET",
-                      params: {wstoken: "dc6d0690f70a922ea6350e4e6a31d201",
+                      params: {wsfunction: "core_webservice_get_site_info",
+                               wstoken: window.localStorage['token'],
+                               moodlewsrestformat: "json"}
+
+        });
+    };
+
+    this.getSessions = function(_userid) {
+        var url = window.localStorage['url'] + '/webservice/rest/server.php';
+        return $http({
+                      url: url,
+                      method: "GET",
+                      params: {wstoken: window.localStorage['token'],
                                wsfunction: "mod_wsattendance_get_courses_with_today_sessions",
                                moodlewsrestformat: "json",
                                userid: _userid}
 
-                });
+        });
     };
 
     this.getSession = function (_sessionid) {
+        var url = window.localStorage['url'] + '/webservice/rest/server.php';
         return $http({
-                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
+                      url: url,
                       method: "GET",
-                      params: {wstoken: "dc6d0690f70a922ea6350e4e6a31d201",
+                      params: {wstoken: window.localStorage['token'],
                                wsfunction: "mod_wsattendance_get_session_info",
                                moodlewsrestformat: "json",
                                sessionid: _sessionid}
 
-                });
+        });
     };
 
     this.takeAttendance = function (_users, _session_info) {
+        var url = window.localStorage['url'] + '/webservice/rest/server.php';
         //Moodle  does not support JSON parameters as input.
         data_as_string = 'session=' + _session_info +'&students='+ _users;
 
         return $http({
-                      url: "http://107.170.117.157/moodle29/webservice/rest/server.php",
+                      url: url,
                       method: "POST",
                       headers: {
                           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                       },
                       params: {
-                          wstoken: "dc6d0690f70a922ea6350e4e6a31d201",
+                          wstoken: window.localStorage['token'],
                           wsfunction: "mod_wsattendance_take_attendance"
                       },
                       data: data_as_string

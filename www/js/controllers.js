@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $ionicHistory) {
+.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $ionicHistory, $window) {
     $ionicHistory.nextViewOptions ({
         disableBack: true
     });
@@ -13,18 +13,16 @@ angular.module('starter.controllers', [])
     $scope.login = function() {
         window.localStorage['url'] = $scope.data.url;
         window.localStorage['username'] = $scope.data.username;
-        LoginService.getUserToken($scope.data.password); /*.success(function(data) {
-            console.log(data.hasOwnProperty('error'));
-            if (data.hasOwnProperty('error')) {
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Falha ao autenticar! =/',
-                    template: 'Por favor, verifique suas credenciais!'
-                });
-            } else {
-                
-            } */
-            //$state.go('my_sessions', {'id':$scope.data.username});
-       // });
+        $service = LoginService.checkUrl(); 
+        $service.then(function(resp) {
+            $service = LoginService.getUserToken($scope.data.password);
+            $service.then(function(resp) {
+                window.localStorage['token'] = resp.data.token;
+                $state.go('my_sessions');
+            });
+        }, function(err) {
+            $window.alert("URL não encontrada!");
+        }); 
     }
 })
 
@@ -55,10 +53,17 @@ angular.module('starter.controllers', [])
         $scope.popover.hide();
     };
     
-    $service = SessionsService.getSessions(103);
+    $service = SessionsService.getSiteInfo();
     $service.then(function(resp) {
-        $scope.courses_with_sessions = (angular.fromJson(resp.data));
-        $ionicLoading.hide();
+        var userid = angular.fromJson(resp.data).userid;
+        $service = SessionsService.getSessions(userid);
+        $service.then(function(resp) {
+            $scope.courses_with_sessions = (angular.fromJson(resp.data));
+            console.log(resp);
+            $ionicLoading.hide();
+        }, function(err) {
+            $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
+        });
     }, function(err) {
         $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
     });
