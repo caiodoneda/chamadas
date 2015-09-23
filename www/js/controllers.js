@@ -11,7 +11,6 @@ angular.module('starter.controllers', [])
     $scope.data.password = '';
 
     $scope.login = function() {
-        console.log($scope.data.url);
         window.localStorage['url'] = $scope.data.url;
         window.localStorage['username'] = $scope.data.username;
         LoginService.getUserToken($scope.data.password); /*.success(function(data) {

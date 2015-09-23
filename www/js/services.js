@@ -6,14 +6,13 @@ angular.module('starter.services', [])
     };
 
     this.getUserToken = function(pw) {
-        //var ref = window.open('https://moodle.ufsc.br/login/index.php?' , '_system', 'location=no');
-        
-
-        var ref = window.open('http://www.google.com' , '_system', 'location=no');
-        var myCallback = function() { alert(event.url); }
-        ref.addEventListener('exit', myCallback);
-        
-        
+        var ref = cordova.InAppBrowser.open('http://apache.org', '_blank', 'location=yes');
+        ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
+         ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
+         ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+         ref.addEventListener('exit', function(event) { alert(event.type); });
+        //var ref = window.open('https://moodle.ufsc.br/login/index.php?' , '_system', 'location=no');   
+        console.log(ref);
 
         //var url = window.localStorage['url'] + '/login/token.php';
         /*
