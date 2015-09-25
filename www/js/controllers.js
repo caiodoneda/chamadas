@@ -5,24 +5,47 @@ angular.module('starter.controllers', [])
         disableBack: true
     });
 
+    $scope.errors = {};
     $scope.data = {};
     $scope.data.url = window.localStorage['url'] || '';
     $scope.data.username = window.localStorage['username'] || '';
     $scope.data.password = '';
 
     $scope.login = function() {
-        window.localStorage['url'] = $scope.data.url;
-        window.localStorage['username'] = $scope.data.username;
-        $service = LoginService.checkUrl(); 
-        $service.then(function(resp) {
-            $service = LoginService.getUserToken($scope.data.password);
+        if (formValidation($scope)) {
+            window.localStorage['url'] = $scope.data.url;
+            window.localStorage['username'] = $scope.data.username;
+            $service = LoginService.checkUrl(); 
             $service.then(function(resp) {
-                window.localStorage['token'] = resp.data.token;
-                $state.go('my_sessions');
+                $service = LoginService.getUserToken($scope.data.password);
+                $service.then(function(resp) {
+                    window.localStorage['token'] = resp.data.token;
+                    $state.go('my_sessions');
+                });
+            }, function(err) {
+                $window.alert("URL Inválida!");
             });
-        }, function(err) {
-            $window.alert("URL não encontrada!");
-        }); 
+        } 
+    }
+
+    function formValidation($scope) {
+        var proceed = true;
+
+        if (!$scope.data.username) {
+            $scope.errors.usernameInvalid = 'requiredField';
+            proceed = false;
+        }
+        
+        if (!$scope.data.password) {
+            $scope.errors.passwordInvalid = 'requiredField';
+            proceed = false;
+        }
+
+        return proceed;
+    }
+
+    function removeClass(object) {
+
     }
 })
 
