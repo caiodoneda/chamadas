@@ -4,7 +4,7 @@ angular.module('starter.controllers', [])
     $ionicHistory.nextViewOptions ({
         disableBack: true
     });
-
+    
     $scope.errors = {};
     $scope.data = {};
     $scope.data.url = window.localStorage['url'] || '';
@@ -19,8 +19,13 @@ angular.module('starter.controllers', [])
             $service.then(function(resp) {
                 $service = LoginService.getUserToken($scope.data.password);
                 $service.then(function(resp) {
-                    window.localStorage['token'] = resp.data.token;
-                    $state.go('my_sessions');
+                    if (resp.data.error) {
+                        alert('Problemas de identificação, verifique suas credenciais!');
+                    } else {
+                        window.localStorage['token'] = resp.data.token;
+                        clearForm($scope);
+                        $state.go('my_sessions');
+                    }
                 });
             }, function(err) {
                 $window.alert("URL Inválida!");
@@ -29,6 +34,7 @@ angular.module('starter.controllers', [])
     }
 
     function formValidation($scope) {
+        $scope.data.url = fixUrl($scope.data.url);
         var proceed = true;
 
         if (!$scope.data.username) {
@@ -44,8 +50,25 @@ angular.module('starter.controllers', [])
         return proceed;
     }
 
-    function removeClass(object) {
+    function fixUrl(url) {
+        /*
+        if (url) {
+            if (url.includes('http')) {
+                if (!url.includes('https')) {
+                    url = url.replace('http', 'https');
+                }
+            } else {
+                url = 'https://' + url;
+            }
+        }
+        */
+        return url;
+    }
 
+    function clearForm($scope) {
+        $scope.errors.usernameInvalid = '';
+        $scope.errors.passwordInvalid = '';
+        $scope.data.password = '';
     }
 })
 
@@ -82,7 +105,6 @@ angular.module('starter.controllers', [])
         $service = SessionsService.getSessions(userid);
         $service.then(function(resp) {
             $scope.courses_with_sessions = (angular.fromJson(resp.data));
-            console.log(resp);
             $ionicLoading.hide();
         }, function(err) {
             $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
