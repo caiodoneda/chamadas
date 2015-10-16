@@ -72,7 +72,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('MySessionsCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicPopover, $ionicHistory) {
+.controller('MySessionsCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicPopover, $ionicHistory, $window) {
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -108,9 +108,11 @@ angular.module('starter.controllers', [])
             $ionicLoading.hide();
         }, function(err) {
             $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
+            $ionicLoading.hide();    
         });
     }, function(err) {
         $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
+        $ionicLoading.hide();     
     });
 
     $scope.logout = function() {
@@ -159,7 +161,7 @@ angular.module('starter.controllers', [])
     function onNfc(nfcEvent) {
         var tag = nfcEvent.tag;
         var tagId = nfc.bytesToHexString(tag.id);
-        alert(tagId);
+        $scope.updateStatusNFC(tagId);
     }
 
     function win() {
@@ -193,6 +195,16 @@ angular.module('starter.controllers', [])
                 user.status = findStatus(session.statuses, parseInt(user.statusid));
             });
         }
+
+        //Marcando status com maior peso (presença via NFC)
+        var bigger = session.statuses[0];
+        angular.forEach(session.statuses, function(status){
+            if (status.grade > bigger.grade) {
+                bigger = status;
+            }
+        });
+
+        $scope.biggerStatus = bigger;
     }
 
     function findStatus(statuses, statusid) {
@@ -227,6 +239,15 @@ angular.module('starter.controllers', [])
     $scope.closeModal = function() {
         $scope.modal.hide();
     };
+
+    $scope.updateStatusNFC = function(tag) {
+        angular.forEach($scope.session.users, function(user) {
+            if (user.rfid == tag) {
+                $scope.currentUser = user;
+                $scope.changeStatus($scope.biggerStatus);
+            }
+        });
+    }
 
     $scope.changeStatus = function(status) {
         $scope.currentUser.status = status.description;
