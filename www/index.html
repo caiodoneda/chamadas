@@ -20,14 +20,19 @@
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
-
-    <!-- require PLugin -->
-    <script src="../node_modules/requirejs/require.js"></script>
     
     <!-- your app's js -->
     <script src="js/app.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/services.js"></script>
+    
+    <script src="js/controllers/controllers.js"></script>
+    <script src="js/controllers/loginCtrl.js"></script>
+    <script src="js/controllers/mySessionsCtrl.js"></script>
+    <script src="js/controllers/mySessionCtrl.js"></script>
+    
+    <script src="js/services/services.js"></script>
+    <script src="js/services/loginService.js"></script>
+    <script src="js/services/sessionsService.js"></script>
+
   </head>
   <body ng-app="starter">
     <!--
