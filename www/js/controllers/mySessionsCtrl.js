@@ -1,4 +1,6 @@
 angular.module('starter.controllers').controller('MySessionsCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicPopover, $ionicHistory, $window) {
+    window.localStorage['url'] = 'http://moodle.ufsc.br';
+
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -27,7 +29,6 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
     
     $service = SessionsService.getSiteInfo();
     $service.then(function(resp) {
-        console.log(resp.data);
         var userid = angular.fromJson(resp.data).userid;
         $service = SessionsService.getSessions(userid);
         $service.then(function(resp) {

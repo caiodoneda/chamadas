@@ -1,6 +1,6 @@
 angular.module('starter.controllers').service('SessionsService', ['$http', function ($http, $scope) {
     this.getSiteInfo = function() {
-        var url = window.localStorage['url'] + '/webservice/rest/server.php';
+        var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
         return $http({
                       url: url,
                       method: "GET",
@@ -12,7 +12,7 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
     };
 
     this.getSessions = function(_userid) {
-        var url = window.localStorage['url'] + '/webservice/rest/server.php';
+        var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
         return $http({
                       url: url,
                       method: "GET",
@@ -25,7 +25,7 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
     };
 
     this.getSession = function (_sessionid) {
-        var url = window.localStorage['url'] + '/webservice/rest/server.php';
+        var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
         return $http({
                       url: url,
                       method: "GET",
@@ -38,7 +38,7 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
     };
 
     this.takeAttendance = function (_users, _session_info) {
-        var url = window.localStorage['url'] + '/webservice/rest/server.php';
+        var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
         //Moodle  does not support JSON parameters as input.
         data_as_string = 'session=' + _session_info +'&students='+ _users;
 
