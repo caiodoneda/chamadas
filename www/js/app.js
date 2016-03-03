@@ -5,10 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
+      $cordovaPlugin.Toast().then(success, error);
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
 
@@ -23,10 +24,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
+  //window.localStorage['siteUrl'] = 'https://moodle.ufsc.br';
+  window.localStorage['siteUrl'] = 'http://caiodoneda.servebeer.com/moodle29';
+  
   $stateProvider
 
   .state('login', {

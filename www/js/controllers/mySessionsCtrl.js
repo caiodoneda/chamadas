@@ -47,9 +47,19 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
         $ionicHistory.nextViewOptions ({
             disableBack: true
         });
-
         $scope.popover.hide();
-        $state.go('login');
+
+        url = window.localStorage['siteUrl'] + '/login/logout.php';
+    
+        var ref = window.open(url, '_blank');
+        
+        ref.addEventListener('loadstart', function(event) {
+            if (!event.url.match('logout')) ref.close();
+        });
+
+        ref.addEventListener('exit', function(event) {
+            $state.go('login');
+        });
     };
 
     $scope.loadSession = function(session) {

@@ -1,4 +1,5 @@
-angular.module('starter.controllers').controller('MySessionCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopover, $ionicHistory) {
+angular.module('starter.controllers').controller('MySessionCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopover, $ionicHistory, $cordovaToast) {
+    $cordovaToast.showLongBottom('Here is a message');
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -112,7 +113,9 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
             if (user.rfid == tag) {
                 $scope.currentUser = user;
                 $scope.changeStatus($scope.biggerStatus);
-            }
+                $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {
+                    }, function (error) {});
+                }
         });
     }
 
@@ -177,9 +180,19 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $ionicHistory.nextViewOptions ({
             disableBack: true
         });
-
         $scope.popover.hide();
-        $state.go('login');
+
+        url = window.localStorage['siteUrl'] + '/login/logout.php';
+    
+        var ref = window.open(url, '_blank');
+        
+        ref.addEventListener('loadstart', function(event) {
+            if (!event.url.match('logout')) ref.close();
+        });
+
+        ref.addEventListener('exit', function(event) {
+            $state.go('login');
+        });
     };
 
     $scope.updateAll = function(status) {
