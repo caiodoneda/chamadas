@@ -1,5 +1,4 @@
 angular.module('starter.controllers').controller('MySessionCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopover, $ionicHistory, $cordovaToast) {
-    $cordovaToast.showLongBottom('Here is a message');
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -189,6 +188,8 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         ref.addEventListener('loadstart', function(event) {
             if (!event.url.match('logout')) ref.close();
         });
+
+        window.localStorage['token'] = '';
 
         ref.addEventListener('exit', function(event) {
             $state.go('login');

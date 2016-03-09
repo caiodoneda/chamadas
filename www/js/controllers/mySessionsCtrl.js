@@ -1,6 +1,4 @@
 angular.module('starter.controllers').controller('MySessionsCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicPopover, $ionicHistory, $window) {
-    window.localStorage['url'] = 'http://moodle.ufsc.br';
-
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -56,6 +54,8 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
         ref.addEventListener('loadstart', function(event) {
             if (!event.url.match('logout')) ref.close();
         });
+
+        window.localStorage['token'] = '';
 
         ref.addEventListener('exit', function(event) {
             $state.go('login');

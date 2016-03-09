@@ -5,6 +5,12 @@ angular.module('starter.controllers').controller('LoginCtrl', function($scope, S
 
     var isLoggedIn = false;
     
+    if ( 'token' in window.localStorage) {
+        if (Boolean (window.localStorage['token'])) {
+            $state.go('my_sessions');
+        }
+    }
+
     $scope.login = function() {
         var passport = Math.random() * 1000;
         url = window.localStorage['siteUrl'] + '/local/mobile/launch.php?service=local_mobile&passport=' + passport;
