@@ -34,6 +34,17 @@ angular.module('starter.controllers').controller('LoginCtrl', function($scope, S
         
         ref.addEventListener('exit', function(event) {
             if (isLoggedIn) {
+                if ('userid' in window.localStorage) {
+                    if (Boolean (window.localStorage['userid'])) {
+                        $service = SessionsService.getSiteInfo();
+                        $service.then(function(resp) {
+                            data = (angular.fromJson(resp.data));
+                            window.localStorage['userid'] = data.userid;
+                            window.localStorage['username'] = data.username;
+                        }, function(err) {});
+                    }
+                }
+
                 $state.go('my_sessions');
             }
         });

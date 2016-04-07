@@ -30,17 +30,17 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
                       url: url,
                       method: "GET",
                       params: {wstoken: window.localStorage['token'],
-                               wsfunction: "mod_wsattendance_get_session_info",
+                               wsfunction: "mod_wsattendance_get_session",
                                moodlewsrestformat: "json",
                                sessionid: _sessionid}
 
         });
     };
 
-    this.takeAttendance = function (_users, _session_info) {
+    this.updateUserStatus = function (sessionid, studentid, takenbyid, statusid, statusset) {
         var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
         //Moodle  does not support JSON parameters as input.
-        data_as_string = 'session=' + _session_info +'&students='+ _users;
+        data_as_string = 'sessionid=' + sessionid + '&studentid=' + studentid + '&takenbyid=' + takenbyid + '&statusid=' + statusid + '&statusset=' + statusset;
 
         return $http({
                       url: url,
@@ -50,7 +50,7 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
                       },
                       params: {
                           wstoken: window.localStorage['token'],
-                          wsfunction: "mod_wsattendance_take_attendance"
+                          wsfunction: "mod_wsattendance_update_user_status"
                       },
                       data: data_as_string
                       });

@@ -112,68 +112,37 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
             if (user.rfid == tag) {
                 $scope.currentUser = user;
                 $scope.changeStatus($scope.biggerStatus);
-                $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {
-                    }, function (error) {});
-                }
+                $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {}, function (error) {});
+            }   
         });
     }
 
     $scope.changeStatus = function(status) {
         $scope.currentUser.status = status.description;
         $scope.currentUser.statusid = status.id;
-        $scope.currentUser = null;
+        
         $scope.closeModal();
-    };
-
-    $scope.takeAttendance = function (session) {
-        var users = {};
-        var session_info = {};
-        var proceed = true;
-
-        angular.forEach(session.users, function(user) {
-            if (typeof user.statusid == 'undefined') {
-                proceed = false;
-            }
-            
-            var current_user = {"id": user.id, "statusid": user.statusid, "remarks": ""};
-            users[user.id] = current_user;
-        });
 
         statusset = "";
-        angular.forEach(session.statuses, function(status) {
+        angular.forEach($scope.session.statuses, function(status) {
             if (statusset) {
                 statusset = statusset + "," + status.id;
             } else {
                 statusset = status.id;
             }
         });
+        
+        $service = SessionsService.updateUserStatus($scope.session.id, $scope.currentUser.id, window.localStorage['userid'], status.id, statusset);
+        $service.then(function(resp) {
+            $ionicLoading.hide();
+            console.log(resp);
+        }, function(err) {
+            $window.alert("Não foi possível enviar esta sessão: \n \n =(");
+            $ionicLoading.hide();
+        });
 
-        var d = new Date();
-        var time = d.getTime();
-        session_info = {"statusset": statusset, "id": session.id, "timetaken": time, "takenby": 103};
-
-        if (proceed) {
-            $ionicLoading.show({
-                content: 'Loading',
-                animation: 'fade-in',
-                showBackdrop: true,
-                maxWidth: 200,
-                showDelay: 0
-            });
-
-            $service = SessionsService.takeAttendance(angular.toJson(users), angular.toJson(session_info));
-            $service.then(function(resp) {
-                $ionicLoading.hide();
-                $window.alert("Sucesso!!");
-                $state.go('my_sessions', {'id':103});
-            }, function(err) {
-                $window.alert("Não foi possível enviar esta sessão: \n \n =(");
-                $ionicLoading.hide();    
-            });
-        } else {
-            $window.alert("Ainda existem usuários com estado indefinido!!!");
-        }
-    }
+        $scope.currentUser = null;
+    };
 
     $scope.logout = function() {
         $ionicHistory.nextViewOptions ({
@@ -197,9 +166,25 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     };
 
     $scope.updateAll = function(status) {
+        statusset = "";
+        angular.forEach($scope.session.statuses, function(status) {
+            if (statusset) {
+                statusset = statusset + "," + status.id;
+            } else {
+                statusset = status.id;
+            }
+        });
+
         angular.forEach($scope.session.users, function(user) {
             user.status = status.description;
             user.statusid = status.id;
+            
+            $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset);
+            $service.then(function(resp) {
+                console.log(resp);
+            }, function(err) {
+                //TODO
+            });
         });
 
         $scope.popover.hide();
