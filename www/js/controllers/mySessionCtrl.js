@@ -48,7 +48,7 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter esta sessão: \n \n =(");
-    }); 
+    });
 
     function updateStatus(session) {
         attendance_log = [];
@@ -91,18 +91,18 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     }).then(function(modal) {
         $scope.modal = modal;
     });
-    
+
     $scope.openModal = function(user) {
         var radios = document.getElementsByClassName("radio-icon");
 
         for(var i = 0; i < radios.length; i++) {
             radios[i].style.visibility = "hidden";
         }
-        
+
         $scope.modal.show();
         $scope.currentUser = user;
     };
-    
+
     $scope.closeModal = function() {
         $scope.modal.hide();
     };
@@ -113,14 +113,14 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
                 $scope.currentUser = user;
                 $scope.changeStatus($scope.biggerStatus);
                 $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {}, function (error) {});
-            }   
+            }
         });
     }
 
     $scope.changeStatus = function(status) {
         $scope.currentUser.status = status.description;
         $scope.currentUser.statusid = status.id;
-        
+
         $scope.closeModal();
 
         statusset = "";
@@ -131,13 +131,17 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
                 statusset = status.id;
             }
         });
-        
-        $service = SessionsService.updateUserStatus($scope.session.id, $scope.currentUser.id, window.localStorage['userid'], status.id, statusset);
+
+        user = $scope.currentUser;
+        user.sentStatus = "Enviando...";
+
+        $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset);
         $service.then(function(resp) {
             $ionicLoading.hide();
-            console.log(resp);
+            user.sentStatus = "Enviado";
         }, function(err) {
-            $window.alert("Não foi possível enviar esta sessão: \n \n =(");
+            user.sentStatus = "Falha ao enviar";
+            $window.alert("Não foi possível enviar este usuário: \n \n =(");
             $ionicLoading.hide();
         });
 
@@ -151,9 +155,9 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $scope.popover.hide();
 
         url = window.localStorage['siteUrl'] + '/login/logout.php';
-    
+
         var ref = window.open(url, '_blank');
-        
+
         ref.addEventListener('loadstart', function(event) {
             if (!event.url.match('logout')) ref.close();
         });
@@ -178,12 +182,13 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         angular.forEach($scope.session.users, function(user) {
             user.status = status.description;
             user.statusid = status.id;
-            
+            user.sentStatus = "Enviando...";
+
             $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset);
             $service.then(function(resp) {
-                console.log(resp);
+                user.sentStatus = "Enviado";
             }, function(err) {
-                //TODO
+                user.sentStatus = "Falha ao enviar";
             });
         });
 

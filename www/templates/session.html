@@ -1,4 +1,4 @@
-<ion-view view-title="{{session.sessioninfo.description}}" class="session" name="session-view">
+<ion-view view-title="" class="session" name="session-view">
 	<ion-nav-buttons side="right">
 		<button class="button icon ion-gear-a" ng-click="openPopover($event)"></button>
 	</ion-nav-buttons>
@@ -8,10 +8,13 @@
 			<div class="item item-avatar">
 				<img src="img/noimage.png">
 				<h2>{{user.firstname + " " + user.lastname}}</h2>
-    			<p>{{user.status}}</p>
-			</div>	
+    			<p>
+					<div>{{user.status}}</div>
+					<div>{{user.sentStatus}}</div>
+				</p>
+			</div>
 		</div>
-		
+
 		<script id="status-modal.html" type="text/ng-template">
 		  <ion-modal-view>
 		    <ion-header-bar>
@@ -20,7 +23,7 @@
 		    <ion-content>
 		        <div class="list">
 				  <label class="item item-radio" ng-repeat="(key, status) in session.statuses">
-				    <input type="radio" name="group" value="status.description" 
+				    <input type="radio" name="group" value="status.description"
 				           ng-click="changeStatus(status)">
 				    <div class="item-content">{{status.description}}</div>
 				    <i class="radio-icon ion-checkmark"></i>
@@ -37,7 +40,9 @@
                         Marcar todos como {{status.description}}
                     </button>
 
-                    <button class="button button-full logout-button" ng-click="logout()"> Sair </button>
+                    <button class="button button-full logout-button" ng-click="logout()">
+						Sair
+					</button>
                 </ion-content>
             </ion-popover-view>
         </script>
