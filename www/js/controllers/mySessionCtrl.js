@@ -7,6 +7,10 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         showDelay: 0
     });
 
+    $ionicHistory.nextViewOptions ({
+        disableBack: true
+    });
+
     $scope.popover = $ionicPopover.fromTemplate({
         scope: $scope
     });
@@ -24,6 +28,10 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     $scope.closePopover = function() {
         $scope.popover.hide();
     };
+
+    $scope.goBack = function() {
+        $state.go('my_sessions');
+    }
 
     function onNfc(nfcEvent) {
         var tag = nfcEvent.tag;
@@ -44,6 +52,11 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     $service = SessionsService.getSession($stateParams['sessionid']);
     $service.then(function(resp) {
         $scope.session = (angular.fromJson(resp.data));
+
+        if ($scope.session.users.length == 0) {
+            $state.go('session_not_found');
+        }
+
         updateStatus($scope.session);
         $ionicLoading.hide();
     }, function(err) {

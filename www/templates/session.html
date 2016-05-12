@@ -2,6 +2,9 @@
 	<ion-nav-buttons side="right">
 		<button class="button icon ion-gear-a" ng-click="openPopover($event)"></button>
 	</ion-nav-buttons>
+	<ion-nav-buttons side="left">
+		<button class="button icon ion-arrow-left-c" ng-click="goBack()"></button>
+	</ion-nav-buttons>
 
 	<ion-content class="padding">
 		<div class="list card student_card" ng-repeat="(key, user) in session.users" ng-click="openModal(user)">

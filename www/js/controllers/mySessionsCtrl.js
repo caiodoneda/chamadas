@@ -7,6 +7,10 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
         showDelay: 0
     });
 
+    $ionicHistory.nextViewOptions ({
+        disableBack: true
+    });
+
     $scope.popover = $ionicPopover.fromTemplate({
         scope: $scope
      });
