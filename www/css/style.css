@@ -45,5 +45,19 @@ ion-popover-view.fit .button.button-full {
 
 .student_card {
 	margin-bottom: 5px;
-	margin-top: 5px;	
+	margin-top: 5px;
+}
+
+.nfc-enabled {
+	background-color: #AAFFAA;
+	width: 10%;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.nfc-disabled {
+	background-color: #E0DBDB;
+	width: 10%;
+	padding: 10px;
+	border-radius: 5px;
 }

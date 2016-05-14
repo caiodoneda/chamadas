@@ -7,6 +7,9 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         showDelay: 0
     });
 
+    $scope.nfcStatus = "NFC desabilitado";
+    $scope.nfcClass = "nfc-disabled";
+
     $ionicHistory.nextViewOptions ({
         disableBack: true
     });
@@ -40,11 +43,13 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     }
 
     function win() {
-        console.log("Listening for NFC Tags");
+        $scope.nfcStatus = "NFC habilitado";
+        $scope.nfcClass = "nfc-enabled";
     }
 
     function fail(error) {
-        alert("Error adding NFC listener");
+        $scope.nfcStatus = "NFC desabilitado";
+        $scope.nfcClass = "nfc-disabled";
     }
 
     if (typeof nfc !== 'undefined') nfc.addTagDiscoveredListener(onNfc, win, fail);
