@@ -30,9 +30,15 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
     };
 
     var userid = window.localStorage['userid'];
+
     $service = SessionsService.getSessions(userid);
     $service.then(function(resp) {
         $scope.courses_with_sessions = (angular.fromJson(resp.data));
+
+        if ($scope.courses_with_sessions.length == 0) {
+            $state.go('my_sessions_not_found');
+        }
+
         $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter as sessões do dia: \n \n =(");

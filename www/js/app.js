@@ -36,21 +36,31 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('my_sessions', {
+      cache : false,
       url: '/my-sessions/',
       templateUrl: 'templates/my-sessions.html',
       controller: 'MySessionsCtrl'
   })
 
   .state('session', {
+      cache : false,
       url: '/session/:moduleid/:sessionid/:groupid',
       templateUrl: 'templates/session.html',
       controller: 'MySessionCtrl'
   })
 
   .state('session_not_found', {
+      cache : false,
       url: '/session-not-found/',
       templateUrl: 'templates/session_not_found.html',
       controller: 'SessionNotFound'
+  })
+
+  .state('my_sessions_not_found', {
+      cache : false,
+      url: '/my-sessions-not-found/',
+      templateUrl: 'templates/my_sessions_not_found.html',
+      controller: 'MySessionsNotFound'
   })
 
   // if none of the above states are matched, use this as the fallback
