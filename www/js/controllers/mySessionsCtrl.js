@@ -7,6 +7,10 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
         showDelay: 0
     });
 
+    $ionicHistory.nextViewOptions ({
+        disableBack: true
+    });
+
     $scope.popover = $ionicPopover.fromTemplate({
         scope: $scope
      });
@@ -20,26 +24,21 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
     $scope.openPopover = function($event) {
         $scope.popover.show($event);
     };
-    
+
     $scope.closePopover = function() {
         $scope.popover.hide();
     };
-    
-    $service = SessionsService.getSiteInfo();
+
+    var userid = window.localStorage['userid'];
+    $service = SessionsService.getSessions(userid);
     $service.then(function(resp) {
-        var userid = angular.fromJson(resp.data).userid;
-        $service = SessionsService.getSessions(userid);
-        $service.then(function(resp) {
-            $scope.courses_with_sessions = (angular.fromJson(resp.data));
-            $ionicLoading.hide();
-        }, function(err) {
-            $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
-            $ionicLoading.hide();    
-        });
+        $scope.courses_with_sessions = (angular.fromJson(resp.data));
+        $ionicLoading.hide();
     }, function(err) {
         $window.alert("Não foi possível obter as sessões do dia: \n \n =(");
-        $ionicLoading.hide();     
+        $ionicLoading.hide();
     });
+
 
     $scope.logout = function() {
         $ionicHistory.nextViewOptions ({
@@ -48,9 +47,9 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
         $scope.popover.hide();
 
         url = window.localStorage['siteUrl'] + '/login/logout.php';
-    
+
         var ref = window.open(url, '_blank');
-        
+
         ref.addEventListener('loadstart', function(event) {
             if (!event.url.match('logout')) ref.close();
         });

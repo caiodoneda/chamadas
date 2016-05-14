@@ -5,6 +5,8 @@ angular.module('starter.controllers').controller('LoginCtrl', function($scope, S
 
     var isLoggedIn = false;
 
+    window.localStorage['token'] = 'ae3df09049bd1de701fabad9a8d6f059';
+
     if ( 'token' in window.localStorage) {
         if (Boolean (window.localStorage['token'])) {
             //Verificando se o token ainda é válido.
@@ -47,18 +49,13 @@ angular.module('starter.controllers').controller('LoginCtrl', function($scope, S
 
         ref.addEventListener('exit', function(event) {
             if (isLoggedIn) {
-                if ('userid' in window.localStorage) {
-                    if (Boolean (window.localStorage['userid'])) {
-                        $service = SessionsService.getSiteInfo();
-                        $service.then(function(resp) {
-                            data = (angular.fromJson(resp.data));
-                            window.localStorage['userid'] = data.userid;
-                            window.localStorage['username'] = data.username;
-                        }, function(err) {});
-                    }
-                }
-
-                $state.go('my_sessions');
+                $service = SessionsService.getSiteInfo();
+                $service.then(function(resp) {
+                    data = (angular.fromJson(resp.data));
+                    window.localStorage['userid'] = data.userid;
+                    window.localStorage['username'] = data.username;
+                    $state.go('my_sessions');
+                }, function(err) {});
             }
         });
     }

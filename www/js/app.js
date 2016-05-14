@@ -26,7 +26,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 .config(function($stateProvider, $urlRouterProvider) {
   //window.localStorage['siteUrl'] = 'https://moodle.ufsc.br';
   window.localStorage['siteUrl'] = 'http://caiodoneda.servebeer.com/moodle29';
-  
+
   $stateProvider
 
   .state('login', {
@@ -34,7 +34,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
   })
-  
+
   .state('my_sessions', {
       url: '/my-sessions/',
       templateUrl: 'templates/my-sessions.html',
@@ -45,6 +45,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       url: '/session/:moduleid/:sessionid/:groupid',
       templateUrl: 'templates/session.html',
       controller: 'MySessionCtrl'
+  })
+
+  .state('session_not_found', {
+      url: '/session-not-found/',
+      templateUrl: 'templates/session_not_found.html',
+      controller: 'SessionNotFound'
   })
 
   // if none of the above states are matched, use this as the fallback
