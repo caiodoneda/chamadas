@@ -50,14 +50,32 @@ ion-popover-view.fit .button.button-full {
 
 .nfc-enabled {
 	background-color: #AAFFAA;
-	width: 10%;
+	width: 50%;
 	padding: 5px;
 	border-radius: 5px;
 }
 
 .nfc-disabled {
 	background-color: #E0DBDB;
-	width: 10%;
+	width: 50%;
 	padding: 10px;
 	border-radius: 5px;
+}
+
+.not-found {
+	color: #B4B7B9;
+	margin-top: 5em;
+}
+
+.not-found .not-found-image {
+	font-size:300px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+
+.not-found .not-found-text {
+	text-align: center;
+	font-size:30px;
 }
