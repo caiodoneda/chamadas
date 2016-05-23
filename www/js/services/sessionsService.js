@@ -37,10 +37,10 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
         });
     };
 
-    this.updateUserStatus = function (sessionid, studentid, takenbyid, statusid, statusset) {
+    this.updateUserStatus = function (sessionid, studentid, takenbyid, statusid, statusset, rfid) {
         var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
         //Moodle  does not support JSON parameters as input.
-        data_as_string = 'sessionid=' + sessionid + '&studentid=' + studentid + '&takenbyid=' + takenbyid + '&statusid=' + statusid + '&statusset=' + statusset;
+        data_as_string = 'sessionid=' + sessionid + '&studentid=' + studentid + '&takenbyid=' + takenbyid + '&statusid=' + statusid + '&statusset=' + statusset + '&rfid=' + rfid;
 
         return $http({
                       url: url,

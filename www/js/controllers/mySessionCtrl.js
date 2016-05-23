@@ -1,5 +1,16 @@
-angular.module('starter.controllers').controller('MySessionCtrl', function($scope, $ionicLoading,
-    SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopup, $ionicPopover, $ionicHistory, $cordovaToast) {
+angular.module('starter.controllers').controller('MySessionCtrl', function($scope, $ionicLoading, SessionsService,
+    $state, $stateParams, $ionicModal, $window, $ionicPopup, $ionicPopover, $ionicHistory, $cordovaToast) {
+
+    $scope.nfcStatus = "NFC desabilitado";
+    $scope.nfcClass = "nfc-disabled";
+    $scope.recordingTag = false;
+
+    $scope.$on("$ionicView.leave", function(event, data){
+        // handle event
+        if (typeof nfc !== 'undefined') nfc.removeTagDiscoveredListener(onNfc);
+        $scope.$destroy();
+    });
+
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -7,10 +18,6 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         maxWidth: 200,
         showDelay: 0
     });
-
-    $scope.nfcStatus = "NFC desabilitado";
-    $scope.nfcClass = "nfc-disabled";
-    $scope.recordingTag = false;
 
     $ionicHistory.nextViewOptions ({
         disableBack: true
@@ -38,13 +45,67 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $state.go('my_sessions');
     }
 
+    $ionicModal.fromTemplateUrl('status-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+
+    $scope.onHold = function(user) {
+        $scope.currentUser = user;
+        $scope.recordingTag = true;
+        $scope.confirmPopup = $ionicPopup.alert({
+            title: 'Gravando tag',
+            scope: $scope,
+            template: '<p>Passe o cartão para confirmar a gravação</p>',
+            buttons: [{text: 'Cancelar'}]
+        });
+    }
+
+    $scope.openModal = function(user) {
+        var radios = document.getElementsByClassName("radio-icon");
+
+        for(var i = 0; i < radios.length; i++) {
+            radios[i].style.visibility = "hidden";
+        }
+
+        $scope.modal.show();
+        $scope.currentUser = user;
+    };
+
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+
+    // Getting session info
+    $service = SessionsService.getSession($stateParams['sessionid']);
+    $service.then(function(resp) {
+        $scope.session = (angular.fromJson(resp.data));
+
+        if ($scope.session.users.length == 0) {
+            $state.go('session_not_found');
+        }
+
+        updateSession($scope.session);
+        $ionicLoading.hide();
+    }, function(err) {
+        $window.alert("Não foi possível obter esta sessão: \n \n =(");
+    });
+
     function onNfc(nfcEvent) {
+        $scope.onNfc(nfcEvent);
+    }
+
+    $scope.onNfc = function(nfcEvent) {
         var tag = nfcEvent.tag;
         var tagId = nfc.bytesToHexString(tag.id);
 
         if ($scope.recordingTag) {
-            $scope.currentTag = tagId;
-            window.localStorage['nfcTags'][$scope.currentUser.id] = tagId;
+            $scope.recordNewTag(tagId);
+            $scope.confirmPopup.close();
+            $scope.recordingTag = false;
+            $scope.currentUser = null;
         }
 
         $scope.updateStatusNFC(tagId);
@@ -62,21 +123,8 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
 
     if (typeof nfc !== 'undefined') nfc.addTagDiscoveredListener(onNfc, win, fail);
 
-    $service = SessionsService.getSession($stateParams['sessionid']);
-    $service.then(function(resp) {
-        $scope.session = (angular.fromJson(resp.data));
 
-        if ($scope.session.users.length == 0) {
-            $state.go('session_not_found');
-        }
-
-        updateStatus($scope.session);
-        $ionicLoading.hide();
-    }, function(err) {
-        $window.alert("Não foi possível obter esta sessão: \n \n =(");
-    });
-
-    function updateStatus(session) {
+    function updateSession(session) {
         attendance_log = [];
         angular.forEach(session.attendance_log, function(log){
             attendance_log[log.studentid] = log.statusid;
@@ -97,7 +145,7 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
             }
         });
 
-        $scope.biggerStatus = bigger;
+        $scope.greaterStatus = bigger;
     }
 
     function findStatus(statuses, statusid) {
@@ -111,55 +159,26 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         return description;
     }
 
-    $ionicModal.fromTemplateUrl('status-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.modal = modal;
-    });
-
-    $scope.onHold = function(user) {
-        $scope.currentUser = user;
-        $scope.currentTag = "";
-        $scope.recordingTag = true;
-        var confirmPopup = $ionicPopup.alert({
-            title: 'Gravando tag',
-            template: '<p>Aguardando cartão...</p><p>Tag:' +" "+ $scope.currentTag + "</p>"
-        });
-
-        confirmPopup.then(function(res) {
-            $scope.currentTag = "";
-            $scope.recordingTag = false;
-            $scope.currentUser = null;
+    $scope.recordNewTag = function(tag) {
+        angular.forEach($scope.session.users, function(user) {
+            if (user.id == $scope.currentUser.id) {
+                user.rfid = tag;
+                user.newTag = true;
+            }
         });
     }
 
-    $scope.openModal = function(user) {
-        var radios = document.getElementsByClassName("radio-icon");
-
-        for(var i = 0; i < radios.length; i++) {
-            radios[i].style.visibility = "hidden";
-        }
-
-        $scope.modal.show();
-        $scope.currentUser = user;
-    };
-
-    $scope.closeModal = function() {
-        $scope.modal.hide();
-    };
-
     $scope.updateStatusNFC = function(tag) {
         angular.forEach($scope.session.users, function(user) {
-            if (user.rfid == tag) {
+            if (user.rfid.toUpperCase() == tag.toUpperCase()) {
                 $scope.currentUser = user;
-                $scope.changeStatus($scope.biggerStatus);
+                $scope.changeStatus($scope.greaterStatus, tag);
                 $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {}, function (error) {});
             }
         });
     }
 
-    $scope.changeStatus = function(status) {
+    $scope.changeStatus = function(status, tag) {
         $scope.currentUser.status = status.description;
         $scope.currentUser.statusid = status.id;
 
@@ -176,8 +195,13 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
 
         user = $scope.currentUser;
         user.sentStatus = "Enviando...";
+        rfid = '';
 
-        $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset);
+        if (user.newTag) {
+            rfid = tag;
+        }
+
+        $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset, rfid);
         $service.then(function(resp) {
             $ionicLoading.hide();
             user.sentStatus = "Enviado";
