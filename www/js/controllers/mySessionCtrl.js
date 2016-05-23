@@ -1,4 +1,5 @@
-angular.module('starter.controllers').controller('MySessionCtrl', function($scope, $ionicLoading, SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopover, $ionicHistory, $cordovaToast) {
+angular.module('starter.controllers').controller('MySessionCtrl', function($scope, $ionicLoading,
+    SessionsService, $state, $stateParams, $ionicModal, $window, $ionicPopup, $ionicPopover, $ionicHistory, $cordovaToast) {
     $ionicLoading.show({
         content: 'Loading',
         animation: 'fade-in',
@@ -9,6 +10,7 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
 
     $scope.nfcStatus = "NFC desabilitado";
     $scope.nfcClass = "nfc-disabled";
+    $scope.recordingTag = false;
 
     $ionicHistory.nextViewOptions ({
         disableBack: true
@@ -39,6 +41,12 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     function onNfc(nfcEvent) {
         var tag = nfcEvent.tag;
         var tagId = nfc.bytesToHexString(tag.id);
+
+        if ($scope.recordingTag) {
+            $scope.currentTag = tagId;
+            window.localStorage['nfcTags'][$scope.currentUser.id] = tagId;
+        }
+
         $scope.updateStatusNFC(tagId);
     }
 
@@ -109,6 +117,22 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     }).then(function(modal) {
         $scope.modal = modal;
     });
+
+    $scope.onHold = function(user) {
+        $scope.currentUser = user;
+        $scope.currentTag = "";
+        $scope.recordingTag = true;
+        var confirmPopup = $ionicPopup.alert({
+            title: 'Gravando tag',
+            template: '<p>Aguardando cartão...</p><p>Tag:' +" "+ $scope.currentTag + "</p>"
+        });
+
+        confirmPopup.then(function(res) {
+            $scope.currentTag = "";
+            $scope.recordingTag = false;
+            $scope.currentUser = null;
+        });
+    }
 
     $scope.openModal = function(user) {
         var radios = document.getElementsByClassName("radio-icon");

@@ -10,7 +10,7 @@
 		<div>
 			<p class="{{nfcClass}}">{{nfcStatus}}</p>
 		</div>
-		<div class="list card student_card" ng-repeat="(key, user) in session.users" ng-click="openModal(user)">
+		<div class="list card student_card" ng-repeat="(key, user) in session.users" on-hold="onHold(user)" ng-click="openModal(user)">
 			<div class="item item-avatar">
 				<img src="img/noimage.png">
 				<h2>{{user.firstname + " " + user.lastname}}</h2>
