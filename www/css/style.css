@@ -79,3 +79,25 @@ ion-popover-view.fit .button.button-full {
 	text-align: center;
 	font-size:30px;
 }
+
+.student-card-item {
+	display: inline-block;
+	vertical-align: top;
+	padding: 2px;
+}
+
+.sent {
+	background-color: #C8F1C8;
+}
+
+.failed {
+	background-color: #E49791;
+}
+
+.first-block {
+	width: 90%;
+}
+
+.record-rfid-icon {
+	float: right;
+}

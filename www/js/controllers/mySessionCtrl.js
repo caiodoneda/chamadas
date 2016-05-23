@@ -52,15 +52,17 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $scope.modal = modal;
     });
 
-    $scope.onHold = function(user) {
-        $scope.currentUser = user;
-        $scope.recordingTag = true;
-        $scope.confirmPopup = $ionicPopup.alert({
-            title: 'Gravando tag',
-            scope: $scope,
-            template: '<p>Passe o cartão para confirmar a gravação</p>',
-            buttons: [{text: 'Cancelar'}]
-        });
+    $scope.recordTag = function(user) {
+        if (user.rfid == '') { //Só executa se ainda não está cadastrado o rfid
+            $scope.currentUser = user;
+            $scope.recordingTag = true;
+            $scope.confirmPopup = $ionicPopup.alert({
+                title: 'Gravando tag',
+                scope: $scope,
+                template: '<p>Passe o cartão para confirmar a gravação</p>',
+                buttons: [{text: 'Cancelar'}]
+            });
+        }
     }
 
     $scope.openModal = function(user) {
@@ -194,7 +196,6 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         });
 
         user = $scope.currentUser;
-        user.sentStatus = "Enviando...";
         rfid = '';
 
         if (user.newTag) {
@@ -203,10 +204,11 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
 
         $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset, rfid);
         $service.then(function(resp) {
+            console.log(resp.data);
             $ionicLoading.hide();
-            user.sentStatus = "Enviado";
+            user.sentStatus = "sent";
         }, function(err) {
-            user.sentStatus = "Falha ao enviar";
+            user.sentStatus = "failed";
             $window.alert("Não foi possível enviar este usuário: \n \n =(");
             $ionicLoading.hide();
         });
@@ -248,13 +250,12 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         angular.forEach($scope.session.users, function(user) {
             user.status = status.description;
             user.statusid = status.id;
-            user.sentStatus = "Enviando...";
 
             $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset);
             $service.then(function(resp) {
-                user.sentStatus = "Enviado";
+                user.sentStatus = "sent";
             }, function(err) {
-                user.sentStatus = "Falha ao enviar";
+                user.sentStatus = "failed";
             });
         });
 

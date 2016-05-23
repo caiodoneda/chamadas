@@ -10,15 +10,39 @@
 		<div>
 			<p class="{{nfcClass}}">{{nfcStatus}}</p>
 		</div>
-		<div class="list card student_card" ng-repeat="(key, user) in session.users" on-hold="onHold(user)" ng-click="openModal(user)">
-			<div class="item item-avatar">
-				<img src="img/noimage.png">
-				<h2>{{user.firstname + " " + user.lastname}}</h2>
-    			<p>
-					<div>{{user.status}}</div>
-					<div>{{user.sentStatus}}</div>
-				</p>
+		<div class="list card student_card" ng-repeat="(key, user) in session.users">
+			<div class="card">
+			  <div class="item item-text-wrap">
+				<div class="student-card-item first-block {{user.sentStatus}}" ng-click="openModal(user)">
+					<div class="student-card-item">
+						<img height="42" width="42" src="img/noimage.png">
+					</div>
+					<div class="student-card-item">
+						<h2>{{user.firstname + " " + user.lastname}}</h2>
+						<p>
+							<div>{{user.status}}</div>
+						</p>
+					</div>
+				</div>
+				<div class="student-card-item record-rfid-icon" ng-if=" user.rfid == '' ">
+					<img height="42" width="42" src="img/nfc.png"  ng-click="recordTag(user)">
+				</div>
+			  </div>
 			</div>
+
+
+			<!-- <div>
+				<div class="item item-avatar" style="display:block !important;">
+					<img src="img/noimage.png">
+					<h2>{{user.firstname + " " + user.lastname}}</h2>
+					<p>
+						<div>{{user.status}}</div>
+					</p>
+				</div>
+				<div style="display:block !important;">
+					<input size="20" type="button"></input>
+				</div>
+			</div> -->
 		</div>
 
 		<script id="status-modal.html" type="text/ng-template">
