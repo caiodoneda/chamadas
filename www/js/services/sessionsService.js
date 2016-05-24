@@ -49,6 +49,7 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
                           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                       },
                       params: {
+                          moodlewsrestformat: "json",
                           wstoken: window.localStorage['token'],
                           wsfunction: "mod_wsattendance_update_user_status"
                       },

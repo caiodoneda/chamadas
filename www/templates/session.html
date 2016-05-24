@@ -13,8 +13,8 @@
 		<div class="list card student_card" ng-repeat="(key, user) in session.users">
 			<div class="card">
 			  <div class="item item-text-wrap">
-				<div class="student-card-item first-block {{user.sentStatus}}" ng-click="openModal(user)">
-					<div class="student-card-item">
+				<div class="student-card-item first-block" ng-click="openModal(user)">
+					<div class="student-card-item {{user.sentStatus}}">
 						<img height="42" width="42" src="img/noimage.png">
 					</div>
 					<div class="student-card-item">

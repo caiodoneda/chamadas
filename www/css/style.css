@@ -87,15 +87,15 @@ ion-popover-view.fit .button.button-full {
 }
 
 .sent {
-	background-color: #C8F1C8;
+	background-color: #009900;
 }
 
 .failed {
-	background-color: #E49791;
+	background-color: #ff3333;
 }
 
 .first-block {
-	width: 90%;
+	width: 80%;
 }
 
 .record-rfid-icon {

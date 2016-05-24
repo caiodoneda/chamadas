@@ -104,13 +104,14 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         var tagId = nfc.bytesToHexString(tag.id);
 
         if ($scope.recordingTag) {
-            $scope.recordNewTag(tagId);
+            recorded = $scope.recordNewTag(tagId);
+            alert(recorded);
             $scope.confirmPopup.close();
             $scope.recordingTag = false;
             $scope.currentUser = null;
+        } else {
+            $scope.updateStatusNFC(tagId);
         }
-
-        $scope.updateStatusNFC(tagId);
     }
 
     function win() {
@@ -162,22 +163,51 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     }
 
     $scope.recordNewTag = function(tag) {
+        newTag = true;
+
         angular.forEach($scope.session.users, function(user) {
-            if (user.id == $scope.currentUser.id) {
-                user.rfid = tag;
-                user.newTag = true;
+            if (user.rfid.toUpperCase() == tag.toUpperCase()) {
+                newTag = false;
             }
         });
+
+        if (newTag) {
+            angular.forEach($scope.session.users, function(user) {
+                if (user.id == $scope.currentUser.id) {
+                    user.rfid = tag;
+                    user.newTag = true;
+
+                    recorded = $scope.changeStatus($scope.greaterStatus, tag);
+                    if (recorded) {
+                        $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {}, function (error) {});
+                        return true;
+                    } else {
+                        alert('here');
+                        $cordovaToast.show("Este identificador já está em uso", 'short', 'bottom').then(function(success) {}, function (error) {});
+                        return false;
+                    }
+                }
+            });
+        } else {
+            $cordovaToast.show("Este identificador já está em uso", 'short', 'bottom').then(function(success) {}, function (error) {});
+            return false;
+        }
+
     }
 
     $scope.updateStatusNFC = function(tag) {
+        found = false;
+
         angular.forEach($scope.session.users, function(user) {
             if (user.rfid.toUpperCase() == tag.toUpperCase()) {
                 $scope.currentUser = user;
                 $scope.changeStatus($scope.greaterStatus, tag);
+                found = true;
                 $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {}, function (error) {});
             }
         });
+
+        if (!found) $cordovaToast.show("Identificador não encontrado", 'short', 'bottom').then(function(success) {}, function (error) {});
     }
 
     $scope.changeStatus = function(status, tag) {
@@ -204,9 +234,23 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
 
         $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset, rfid);
         $service.then(function(resp) {
-            console.log(resp.data);
-            $ionicLoading.hide();
-            user.sentStatus = "sent";
+            resp = angular.fromJson(resp.data);
+            if (resp) {
+                if (resp.value == 201) {
+                    user.sentStatus = "sent";
+                    user.newTag = false;
+                    $scope.currentUser = null;
+                    return true;
+                } else if (resp.value == 304) {
+                    user.newTag = false;
+                    $scope.currentUser = null;
+                    return false;
+                }
+            } else {
+                user.sentStatus = "sent";
+                $scope.currentUser = null;
+                return true;
+            }
         }, function(err) {
             user.sentStatus = "failed";
             $window.alert("Não foi possível enviar este usuário: \n \n =(");
@@ -214,6 +258,7 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         });
 
         $scope.currentUser = null;
+        return true;
     };
 
     $scope.logout = function() {

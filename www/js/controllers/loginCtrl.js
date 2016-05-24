@@ -5,7 +5,7 @@ angular.module('starter.controllers').controller('LoginCtrl', function($scope, S
 
     var isLoggedIn = false;
 
-    window.localStorage['token'] = 'ae3df09049bd1de701fabad9a8d6f059';
+    //window.localStorage['token'] = 'ae3df09049bd1de701fabad9a8d6f059';
 
     if ( 'token' in window.localStorage) {
         if (Boolean (window.localStorage['token'])) {
