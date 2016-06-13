@@ -113,7 +113,7 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
             user = $scope.findUserByTagId(tagId);
 
             if (user) {
-                $scope.sendUser(user, tagId);
+                $scope.sendUser(user, $scope.greaterStatus);
             } else {
                 message = "Identificador não encontrado, associe um identificador clicando no símbolo de NFC ao lado do estudante";
                 $cordovaToast.show(message, 'long', 'bottom').then(function(success)
@@ -167,6 +167,8 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         user.status = status.description;
         user.statusid = status.id;
         user.sentStatus = "sent";
+        message = "Aluno " + user.firstname + " " + user.lastname + " enviado";
+        showToast(message, 'short');
     };
 
     //Manual change of status. Coming from modal.
@@ -183,32 +185,35 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $service.then(function(resp) {
             data = angular.fromJson(resp.data);
 
-            if (data == 200) {
+            if (data = 200) {
                 $scope.changeStatus(user, status);
             } else {
                 user.sentStatus = "fail";
-                $cordovaToast.show("Não foi possível enviar este estudante", 'short', 'bottom').then(function(success)
-                {}, function (error) {});
+                showToast("Não foi possível enviar este estudante", 'short');
             }
         }, function(err) {
             user.sentStatus = "fail";
-            $cordovaToast.show("Não foi possível enviar este estudante", 'short', 'bottom').then(function(success)
-            {}, function (error) {});
+            showToast("Não foi possível enviar este estudante", 'short');
         });
     }
 
     $scope.associateRfidValue = function(student, rfid) {
         $service = SessionsService.associateRfidValue(student.id, rfid);
         $service.then(function(resp) {
-            data = angular.fromJson(resp.data);
-            console.log(data);
-            //Dependendo da resposta, precisa enviar o estudante ou apresentar a mensagem de erro. Depois alterar o status dele
+            data = resp.data;
 
-            //user.rfid = rfid;
-            //$scope.sendUser(user, $scope.greaterStatus);
+            if (data.indexOf("successful association") != -1) {
+                student.rfid = rfid;
+                $scope.sendUser(student, $scope.greaterStatus);
+                showToast("Associação efetuada com sucesso!", 'short');
+            } else if (data.indexOf("RFID already used") != -1) {
+                showToast('Este cartão de identificação já está em uso', 'long');
+            } else {
+                showToast('Este usuário já possui outro cartão de identificação associado', 'long');
+            }
+
         }, function(err) {
-            $cordovaToast.show("Não foi possível realizar a associação com este estudante", 'short', 'bottom').then(function(success)
-            {}, function (error) {});
+            showToast("Não foi possível realizar a associação com este estudante", "short");
         });
     }
 
@@ -244,13 +249,15 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     // Funções auxiliares
 
     $scope.findUserByTagId = function(tag) {
+        _user = null;
+
         angular.forEach($scope.session.users, function(user) {
             if (user.rfid.toUpperCase() == tag.toUpperCase()) {
-                return user;
+                _user = user;
             }
         });
 
-        return null;
+        return _user;
     }
 
     $scope.getStatusSet = function() {
@@ -276,5 +283,9 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         });
 
         return description;
+    }
+
+    function showToast(message, duration) {
+        $cordovaToast.show(message, duration, 'bottom').then(function(success){}, function (error) {});
     }
 })
