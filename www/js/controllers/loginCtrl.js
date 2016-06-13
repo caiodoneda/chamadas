@@ -5,11 +5,6 @@ angular.module('starter.controllers').controller('LoginCtrl', function($scope, S
 
     var isLoggedIn = false;
 
-    // window.localStorage['token'] = 'ae3df09049bd1de701fabad9a8d6f059';
-    // window.localStorage['userid'] = '103';
-    // $state.go('my_sessions');
-
-
     if ( 'token' in window.localStorage) {
         if (Boolean (window.localStorage['token'])) {
             //Verificando se o token ainda é válido.
