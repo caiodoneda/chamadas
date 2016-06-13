@@ -24,8 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
-  //window.localStorage['siteUrl'] = 'https://moodle.ufsc.br';
-  window.localStorage['siteUrl'] = 'http://caiodoneda.servebeer.com/moodle29';
+  window.localStorage['siteUrl'] = 'https://moodle.ufsc.br';
 
   $stateProvider
 

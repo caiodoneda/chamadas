@@ -25,7 +25,7 @@ angular.module('starter.controllers').controller('LoginCtrl', function($scope, S
         var ref = window.open(url, '_blank', 'hidden=yes');
 
         ref.addEventListener('loadstart', function(event) {
-            if (event.url.match('sistemas.ufsc.br') || event.url.match('caio')) {
+            if (event.url.match('sistemas.ufsc.br')) {
                 ref.show();
             }
         });
