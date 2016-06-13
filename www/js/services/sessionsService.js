@@ -37,10 +37,10 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
         });
     };
 
-    this.updateUserStatus = function (sessionid, studentid, takenbyid, statusid, statusset, rfid) {
+    this.updateUserStatus = function (sessionid, studentid, takenbyid, statusid, statusset) {
         var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
         //Moodle  does not support JSON parameters as input.
-        data_as_string = 'sessionid=' + sessionid + '&studentid=' + studentid + '&takenbyid=' + takenbyid + '&statusid=' + statusid + '&statusset=' + statusset + '&rfid=' + rfid;
+        data_as_string = 'sessionid=' + sessionid + '&studentid=' + studentid + '&takenbyid=' + takenbyid + '&statusid=' + statusid + '&statusset=' + statusset;
 
         return $http({
                       url: url,
@@ -52,6 +52,26 @@ angular.module('starter.controllers').service('SessionsService', ['$http', funct
                           moodlewsrestformat: "json",
                           wstoken: window.localStorage['token'],
                           wsfunction: "mod_wsattendance_update_user_status"
+                      },
+                      data: data_as_string
+                      });
+    };
+
+    this.associateRfidValue = function (studentid, rfid) {
+        var url = window.localStorage['siteUrl'] + '/webservice/rest/server.php';
+        //Moodle  does not support JSON parameters as input.
+        data_as_string = 'studentid=' + studentid + '&rfid=' + rfid;
+
+        return $http({
+                      url: url,
+                      method: "POST",
+                      headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                      },
+                      params: {
+                          moodlewsrestformat: "json",
+                          wstoken: window.localStorage['token'],
+                          wsfunction: "mod_wsattendance_associate_rfid_value"
                       },
                       data: data_as_string
                       });

@@ -54,7 +54,7 @@
 		        <div class="list">
 				  <label class="item item-radio" ng-repeat="(key, status) in session.statuses">
 				    <input type="radio" name="group" value="status.description"
-				           ng-click="changeStatus(status)">
+				           ng-click="changeStatusManual(status)">
 				    <div class="item-content">{{status.description}}</div>
 				    <i class="radio-icon ion-checkmark"></i>
 				  </label>

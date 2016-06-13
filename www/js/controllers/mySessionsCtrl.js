@@ -45,7 +45,6 @@ angular.module('starter.controllers').controller('MySessionsCtrl', function($sco
         $ionicLoading.hide();
     });
 
-
     $scope.logout = function() {
         $ionicHistory.nextViewOptions ({
             disableBack: true

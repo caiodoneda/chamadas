@@ -52,19 +52,6 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $scope.modal = modal;
     });
 
-    $scope.recordTag = function(user) {
-        if (user.rfid == '') { //Só executa se ainda não está cadastrado o rfid
-            $scope.currentUser = user;
-            $scope.recordingTag = true;
-            $scope.confirmPopup = $ionicPopup.alert({
-                title: 'Gravando tag',
-                scope: $scope,
-                template: '<p>Passe o cartão para confirmar a gravação</p>',
-                buttons: [{text: 'Cancelar'}]
-            });
-        }
-    }
-
     $scope.openModal = function(user) {
         var radios = document.getElementsByClassName("radio-icon");
 
@@ -92,26 +79,12 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         updateSession($scope.session);
         $ionicLoading.hide();
     }, function(err) {
-        $window.alert("Não foi possível obter esta sessão: \n \n =(");
+        $window.alert("Não foi possível obter dados desta sessão: \n \n =(");
     });
+
 
     function onNfc(nfcEvent) {
         $scope.onNfc(nfcEvent);
-    }
-
-    $scope.onNfc = function(nfcEvent) {
-        var tag = nfcEvent.tag;
-        var tagId = nfc.bytesToHexString(tag.id);
-
-        if ($scope.recordingTag) {
-            recorded = $scope.recordNewTag(tagId);
-            alert(recorded);
-            $scope.confirmPopup.close();
-            $scope.recordingTag = false;
-            $scope.currentUser = null;
-        } else {
-            $scope.updateStatusNFC(tagId);
-        }
     }
 
     function win() {
@@ -126,6 +99,45 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
 
     if (typeof nfc !== 'undefined') nfc.addTagDiscoveredListener(onNfc, win, fail);
 
+    $scope.onNfc = function(nfcEvent) {
+        var tag = nfcEvent.tag;
+        var tagId = nfc.bytesToHexString(tag.id);
+
+        if ($scope.recordingTag) {
+            $scope.associateRfidValue($scope.currentUser, tagId);
+
+            $scope.confirmPopup.close();
+            $scope.recordingTag = false;
+            $scope.currentUser = null;
+        } else {
+            user = $scope.findUserByTagId(tagId);
+
+            if (user) {
+                $scope.sendUser(user, tagId);
+            } else {
+                message = "Identificador não encontrado, associe um identificador clicando no símbolo de NFC ao lado do estudante";
+                $cordovaToast.show(message, 'long', 'bottom').then(function(success)
+                {}, function (error) {});
+            }
+        }
+    }
+
+    $scope.recordTag = function(user) {
+        if (user.rfid == '') { //Só executa se ainda não está cadastrado o rfid
+            $scope.currentUser = user;
+            $scope.recordingTag = true;
+            $scope.confirmPopup = $ionicPopup.alert({
+                title: 'Gravando tag',
+                scope: $scope,
+                template: '<p>Passe o cartão para confirmar a gravação</p>',
+                buttons: [{text: 'Cancelar'}]
+            });
+
+            $scope.confirmPopup.then(function(res) {
+                $scope.recordingTag = false;
+            });
+        }
+    }
 
     function updateSession(session) {
         attendance_log = [];
@@ -151,115 +163,54 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
         $scope.greaterStatus = bigger;
     }
 
-    function findStatus(statuses, statusid) {
-        description = ""
-        angular.forEach(statuses, function(status) {
-            if (status.id == statusid) {
-                description = status.description;
-            }
-        });
+    $scope.changeStatus = function(user, status) {
+        user.status = status.description;
+        user.statusid = status.id;
+        user.sentStatus = "sent";
+    };
 
-        return description;
-    }
-
-    $scope.recordNewTag = function(tag) {
-        newTag = true;
-
-        angular.forEach($scope.session.users, function(user) {
-            if (user.rfid.toUpperCase() == tag.toUpperCase()) {
-                newTag = false;
-            }
-        });
-
-        if (newTag) {
-            angular.forEach($scope.session.users, function(user) {
-                if (user.id == $scope.currentUser.id) {
-                    user.rfid = tag;
-                    user.newTag = true;
-
-                    recorded = $scope.changeStatus($scope.greaterStatus, tag);
-                    if (recorded) {
-                        $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {}, function (error) {});
-                        return true;
-                    } else {
-                        alert('here');
-                        $cordovaToast.show("Este identificador já está em uso", 'short', 'bottom').then(function(success) {}, function (error) {});
-                        return false;
-                    }
-                }
-            });
-        } else {
-            $cordovaToast.show("Este identificador já está em uso", 'short', 'bottom').then(function(success) {}, function (error) {});
-            return false;
-        }
-
-    }
-
-    $scope.updateStatusNFC = function(tag) {
-        found = false;
-
-        angular.forEach($scope.session.users, function(user) {
-            if (user.rfid.toUpperCase() == tag.toUpperCase()) {
-                $scope.currentUser = user;
-                $scope.changeStatus($scope.greaterStatus, tag);
-                found = true;
-                $cordovaToast.show(user.firstname + " " + user.lastname, 'short', 'bottom').then(function(success) {}, function (error) {});
-            }
-        });
-
-        if (!found) $cordovaToast.show("Identificador não encontrado", 'short', 'bottom').then(function(success) {}, function (error) {});
-    }
-
-    $scope.changeStatus = function(status, tag) {
-        $scope.currentUser.status = status.description;
-        $scope.currentUser.statusid = status.id;
-
+    //Manual change of status. Coming from modal.
+    $scope.changeStatusManual = function(status) {
+        $scope.sendUser($scope.currentUser, status);
         $scope.closeModal();
+    }
 
-        statusset = "";
-        angular.forEach($scope.session.statuses, function(status) {
-            if (statusset) {
-                statusset = statusset + "," + status.id;
-            } else {
-                statusset = status.id;
-            }
-        });
+    $scope.sendUser = function(user, status) {
+        takenId = window.localStorage['userid'];
+        statusset = $scope.getStatusSet();
 
-        user = $scope.currentUser;
-        rfid = '';
-
-        if (user.newTag) {
-            rfid = tag;
-        }
-
-        $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset, rfid);
+        $service = SessionsService.updateUserStatus($scope.session.id, user.id, takenId, status.id, statusset);
         $service.then(function(resp) {
-            resp = angular.fromJson(resp.data);
-            if (resp) {
-                if (resp.value == 201) {
-                    user.sentStatus = "sent";
-                    user.newTag = false;
-                    $scope.currentUser = null;
-                    return true;
-                } else if (resp.value == 304) {
-                    user.newTag = false;
-                    $scope.currentUser = null;
-                    return false;
-                }
+            data = angular.fromJson(resp.data);
+
+            if (data == 200) {
+                $scope.changeStatus(user, status);
             } else {
-                user.sentStatus = "sent";
-                $scope.currentUser = null;
-                return true;
+                user.sentStatus = "fail";
+                $cordovaToast.show("Não foi possível enviar este estudante", 'short', 'bottom').then(function(success)
+                {}, function (error) {});
             }
         }, function(err) {
-            user.sentStatus = "failed";
-            $window.alert("Não foi possível enviar este usuário: \n \n =(");
-            $ionicLoading.hide();
+            user.sentStatus = "fail";
+            $cordovaToast.show("Não foi possível enviar este estudante", 'short', 'bottom').then(function(success)
+            {}, function (error) {});
         });
+    }
 
-        $scope.currentUser = null;
-        return true;
-    };
+    $scope.associateRfidValue = function(student, rfid) {
+        $service = SessionsService.associateRfidValue(student.id, rfid);
+        $service.then(function(resp) {
+            data = angular.fromJson(resp.data);
+            console.log(data);
+            //Dependendo da resposta, precisa enviar o estudante ou apresentar a mensagem de erro. Depois alterar o status dele
+
+            //user.rfid = rfid;
+            //$scope.sendUser(user, $scope.greaterStatus);
+        }, function(err) {
+            $cordovaToast.show("Não foi possível realizar a associação com este estudante", 'short', 'bottom').then(function(success)
+            {}, function (error) {});
+        });
+    }
 
     $scope.logout = function() {
         $ionicHistory.nextViewOptions ({
@@ -283,7 +234,28 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
     };
 
     $scope.updateAll = function(status) {
+        angular.forEach($scope.session.users, function(user) {
+            $scope.sendUser(user, status);
+        });
+
+        $scope.popover.hide();
+    }
+
+    // Funções auxiliares
+
+    $scope.findUserByTagId = function(tag) {
+        angular.forEach($scope.session.users, function(user) {
+            if (user.rfid.toUpperCase() == tag.toUpperCase()) {
+                return user;
+            }
+        });
+
+        return null;
+    }
+
+    $scope.getStatusSet = function() {
         statusset = "";
+
         angular.forEach($scope.session.statuses, function(status) {
             if (statusset) {
                 statusset = statusset + "," + status.id;
@@ -292,18 +264,17 @@ angular.module('starter.controllers').controller('MySessionCtrl', function($scop
             }
         });
 
-        angular.forEach($scope.session.users, function(user) {
-            user.status = status.description;
-            user.statusid = status.id;
+        return statusset;
+    }
 
-            $service = SessionsService.updateUserStatus($scope.session.id, user.id, window.localStorage['userid'], status.id, statusset);
-            $service.then(function(resp) {
-                user.sentStatus = "sent";
-            }, function(err) {
-                user.sentStatus = "failed";
-            });
+    function findStatus(statuses, statusid) {
+        description = ""
+        angular.forEach(statuses, function(status) {
+            if (status.id == statusid) {
+                description = status.description;
+            }
         });
 
-        $scope.popover.hide();
+        return description;
     }
 })
