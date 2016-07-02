@@ -12,10 +12,8 @@
       <div ng-repeat="(key, att_instance) in course.attendance_instances">
         <div class="item item-text-wrap" ng-repeat="(key, today_session) in att_instance.today_sessions" ng-click="loadSession(today_session)">
           {{att_instance.name}}:
-          <i class="icon ion-calendar"></i>
-            {{today_session.sessdate * 1000 | date:'dd/MM/yy'}}
           <i class="icon ion-clock"></i>
-            {{today_session.sessdate * 1000 | date :'HH:mm'}}
+            {{today_session.sessdate * 1000 | date :'HH:mm'}} - {{(today_session.sessdate + today_session.duration) * 1000 | date :'HH:mm'}}
         </div>
       </div>
     </div>
